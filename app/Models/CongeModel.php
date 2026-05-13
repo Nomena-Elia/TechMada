@@ -80,5 +80,46 @@ class CongeModel extends Model
                     ->findAll();
     }
     
+    public function getAbsencesMoisEnCours() {
+        return $this->selectSum('nb_jours')
+                    ->where('statut', 'Valide')
+                    ->where('strftime("%m", date_debut)', date('m'))
+                    ->where('strftime("%Y", date_debut)', date('Y'))
+                    ->first();
+    }
+
+    // Compte les demandes en attente de validation
+    public function countEnAttente() {
+        return $this->where('statut', 'en attente')->countAllResults();
+    }
+
+    // Compte les demandes approuvées pour le mois en cours
+    public function countApprouveesMoisEnCours() {
+        return $this->where('statut', 'approuvée')
+                    ->where('strftime("%m", date_debut)', date('m'))
+                    ->where('strftime("%Y", date_debut)', date('Y'))
+                    ->countAllResults();
+    }
+
+    // Liste les congés validés en cours à la date d'aujourd'hui
+    public function getAbsentsAujourdhui() {
+        $aujourdhui = date('Y-m-d H:i:s');
+        return $this->select('conges.*, employes.nom, employes.prenom, types_conge.libelle')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->where('conges.statut', 'approuvée')
+                    ->where('conges.date_debut <=', $aujourdhui)
+                    ->where('conges.date_fin >=', $aujourdhui)
+                    ->findAll();
+    }
+
+    // Récupère les 3 dernières demandes de congés (tous statuts confondus)
+    public function getDemandesRecentes() {
+        return $this->select('conges.*, employes.nom, employes.prenom, types_conge.libelle')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->orderBy('conges.id', 'DESC')
+                    ->findAll(3);
+    }
 
 }

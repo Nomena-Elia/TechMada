@@ -64,6 +64,40 @@
                         ->findAll();
         }
 
+        // Compte le nombre total d'employés actifs
+        public function countActifs() {
+            return $this->where('actif', 1)->countAllResults();
+        }
+
+        // Récupère le nombre d'employés ajoutés durant le mois en cours
+        public function getNouveauxCeMois() {
+            return $this->where('actif', 1)
+                        ->where('strftime("%m", date_embauche)', date('m'))
+                        ->where('strftime("%Y", date_embauche)', date('Y'))
+                        ->countAllResults();
+        }
+
+        // Récupère les employés ayant un solde global critique de congés (ex: cumul jours_attribues - jours_pris <= 2)
+        public function getSoldesCritiques() {
+            $db = \Config\Database::connect();
+            return $db->table('soldes')
+                    ->select('employe_id')
+                    ->groupBy('employe_id')
+                    ->having('SUM(jours_attribues) - SUM(jours_pris) <=', 2)
+                    ->countAllResults();
+        }
+
+        public function getEmployeRole(){
+            $db = \Config\Database::connect();
+            $resultats = $this->distinct()
+                                ->select('role')
+                                ->where('role IS NOT NULL')
+                                ->where('role !=', '')
+                                ->findAll();
+
+                return array_column($resultats, 'role');
+        }
+
     }
     
 

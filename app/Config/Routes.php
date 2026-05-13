@@ -29,6 +29,7 @@ $routes->group('/admin', function($routes) {
     $routes->get('dashboard', 'AdminController::home'); // Obligatoire ny absence du mois en cours ;)
     $routes->get('employe', 'AdminController::getEmployes');
     $routes->get('employe/(:num)', 'AdminController::getEmploye/$1');
+    $routes->post('admin/employe/store', 'AdminController::storeEmploye');
     $routes->post('employe/update/(:num)', 'AdminController::updateEmploye/$1');
     $routes->post('employe/delete/(:num)', 'AdminController::deleteEmploye/$1');
     $routes->get('deparment', 'AdminController::getDeparments');
