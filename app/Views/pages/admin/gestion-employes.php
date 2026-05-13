@@ -52,7 +52,7 @@
             <label class="f-label">Rôle</label>
             <select name = "role" class="f-select">
               <?php foreach($roles as $role) {?>
-                <option value="<?= $role['id'] ?>"><?= $role['role'] ?></option>
+                <option value="<?= esc($role) ?>"><?= esc(ucfirst($role)) ?></option>
               <?php }?>
             </select>
           </div>
