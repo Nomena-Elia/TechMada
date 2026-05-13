@@ -1,5 +1,11 @@
 <?= $this->extend('pages/employes/sidebar') ?>
 
+<?php
+
+    $errors = session()->get('errors') ?? [];
+
+?>
+
 <?= $this->section('content') ?>
 
 <div class="topbar">
@@ -17,29 +23,36 @@
       <div class="form-layout">
 
         <div>
-          <div class="form-section">
+          <form action="/employe/new-demande" method="POST" class="form-section">
             <h3>Détails de la demande</h3>
 
             <div class="f-group" style="margin-bottom:1rem">
               <label class="f-label">Type de congé <span style="color:var(--danger)">*</span></label>
-              <select class="f-select">
+              <select class="f-select is-inval" name="types_conge_id">
                 <option value="">-- Choisir un type --</option>
-                <option value="1" selected>Congé annuel (18 j restants)</option>
+                <!-- <option value="1" selected>Congé annuel (18 j restants)</option>
                 <option value="2">Congé maladie (8 j restants)</option>
                 <option value="3">Congé spécial (1 j restant)</option>
-                <option value="4">Sans solde</option>
+                <option value="4">Sans solde</option> -->
+                <?php foreach($data as $d) { ?>
+                    <option value="<?= $d['types_conge_id'] ?>" <?php echo old('types_conge_id') != null && $d['types_conge_id'] == old('types_conge_id') ? 'selected' : '' ?>><?= $d['libelle'] . ' (reste: ' . $d['jours_reste'] . " j)" ?></option>
+                <?php } ?>
               </select>
-              <div class="f-error"><i class="bi bi-exclamation-circle"></i> Ce champ est requis.</div>
+              <?php if(isset($errors['types_conge_id'])): ?>
+                <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?php echo $errors['types_conge_id'] ?></div>
+              <?php endif; ?>
             </div>
 
             <div class="form-grid-2" style="margin-bottom:1rem">
               <div class="f-group">
                 <label class="f-label">Date de début <span style="color:var(--danger)">*</span></label>
-                <input type="date" class="f-input" value="2025-06-23"/>
+                <input type="date" name="date_debut" class="f-input is-invalid" value="<?php echo old('date_debut') ?? '2025-06-23' ?>"/>
+                <span class="invalid-feedback"><?= $errors['date_debut'] ?? '' ?></span>
               </div>
               <div class="f-group">
                 <label class="f-label">Date de fin <span style="color:var(--danger)">*</span></label>
-                <input type="date" class="f-input" value="2025-06-27"/>
+                <input type="date" name="date_fin" class="f-input is-invalid" value="<?php echo old('date_fin') ?? '2025-06-27' ?>"/>
+                <span class="invalid-feedback"><?= $errors['date_fin'] ?? '' ?></span>
               </div>
             </div>
 
@@ -50,7 +63,7 @@
 
             <div class="f-group" style="margin-bottom:1rem">
               <label class="f-label">Motif (optionnel)</label>
-              <textarea class="f-textarea" placeholder="Précisez le motif de votre demande si nécessaire..."></textarea>
+              <textarea name="motif" class="f-textarea" placeholder="Précisez le motif de votre demande si nécessaire..."></textarea>
               <div class="f-hint">Le motif est visible par le responsable RH.</div>
             </div>
 
@@ -59,13 +72,13 @@
               <a href="page2-dashboard-employe.html" class="btn-secondary"><i class="bi bi-x"></i> Annuler</a>
             </div>
           </div>
-        </div>
+</form>
 
         <div style="display:flex;flex-direction:column;gap:1rem">
           <div class="data-card" style="margin:0">
             <div class="data-card-head"><h3><i class="bi bi-piggy-bank" style="color:var(--forest);margin-right:5px"></i>Vos soldes actuels</h3></div>
             <div style="padding:.75rem 1.1rem;display:flex;flex-direction:column;gap:.75rem">
-              <div>
+              <!-- <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
                   <span style="font-size:.8rem;color:var(--ink)">Congé annuel</span>
                   <span style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--forest);font-weight:500">18 j</span>
@@ -85,7 +98,16 @@
                   <span style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--warn);font-weight:500">1 j</span>
                 </div>
                 <div class="solde-bar"><div class="solde-fill warn" style="width:20%"></div></div>
-              </div>
+              </div> -->
+            <?php foreach($data as $d): ?>
+                <div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                    <span style="font-size:.8rem;color:var(--ink)"><?= $d['libelle'] ?></span>
+                    <span style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--forest);font-weight:500"><?php echo $d['jours_attribues'] ?> j</span>
+                    </div>
+                    <div class="solde-bar"><div class="solde-fill" style="width:<?php echo $d['perc'] ?>%"></div></div>
+                </div>
+            <?php endforeach; ?>
             </div>
           </div>
           <div class="flash flash-info" style="margin:0">

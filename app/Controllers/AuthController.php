@@ -38,4 +38,9 @@ class AuthController extends BaseController
         return redirect()->to($redirectUrl);
     }
 
+    public function logout() {
+        session()->remove('user');
+        return redirect()->to('/');
+    }
+
 }

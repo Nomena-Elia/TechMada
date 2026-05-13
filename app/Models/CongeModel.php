@@ -79,6 +79,22 @@ class CongeModel extends Model
                     ->join('types_conge', 'types_conge.id = conges.types_conge_id')
                     ->findAll();
     }
+
+    public function getCongeEnAttente()
+    {
+        return $this->select('
+                        conges.*,
+                        employes.nom,
+                        employes.prenom,
+                        types_conge.libelle,
+                        (soldes.jours_attribues - soldes.jours_pris) as jours_reste
+                    ')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->join('soldes', 'soldes.employe_id = conges.employe_id AND soldes.types_conge_id=conges.types_conge_id')
+                    ->where('conges.statut', 'En attente')
+                    ->findAll();
+    }
     
     public function getAbsencesMoisEnCours() {
         return $this->selectSum('nb_jours')

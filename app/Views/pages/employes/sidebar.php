@@ -46,7 +46,7 @@
             </a>
         </li>
         <li>
-            <a href="<?= base_url('conge/mes-demandes') ?>" class="<?= ($activePage == 'mes-demandes') ? 'active' : '' ?>">
+            <a href="/employe/demandes" class="<?= ($activePage == 'mes-demandes') ? 'active' : '' ?>">
                 <i class="bi bi-calendar3"></i> Mes demandes
                 <span class="nav-badge alert">2</span>
             </a>
@@ -61,12 +61,12 @@
     <div class="sidebar-user">
         <div class="s-user-row">
             <!-- On peut dynamiser ces données plus tard avec la session -->
-            <div class="avatar av-green">SR</div>
+            <div class="avatar av-green">EMP</div>
             <div>
-                <div class="user-name">Soa Rakoto</div>
+                <div class="user-name"><?= session()->get('user')['nom'] . " " . session()->get('user')['prenom'] ?></div>
                 <div class="user-role">Employé · IT</div>
             </div>
-            <a href="<?= base_url('logout') ?>" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion">
+            <a href="/logout" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion">
                 <i class="bi bi-box-arrow-right"></i>
             </a>
         </div>

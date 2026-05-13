@@ -60,7 +60,9 @@ class SoldeModel extends Model
                         soldes.*,
                         employes.nom,
                         employes.prenom,
-                        types_conge.libelle
+                        types_conge.libelle,
+                        (soldes.jours_attribues - soldes.jours_pris) as jours_reste,
+                        ((soldes.jours_pris) * 100 / soldes.jours_attribues) as perc
                     ')
                     ->join('employes', 'employes.id = soldes.employe_id')
                     ->join('types_conge', 'types_conge.id = soldes.types_conge_id')
