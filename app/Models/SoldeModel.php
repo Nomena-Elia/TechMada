@@ -54,4 +54,6 @@ class SoldeModel extends Model
                     ->join('types_conge', 'types_conge.id = soldes.types_conge_id')
                     ->findAll();
     }
+
+    
 }

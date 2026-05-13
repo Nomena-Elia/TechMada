@@ -79,4 +79,6 @@ class CongeModel extends Model
                     ->join('types_conge', 'types_conge.id = conges.types_conge_id')
                     ->findAll();
     }
+    
+
 }

@@ -27,5 +27,6 @@ class DepartmentModel extends Model
             'rules' => 'permit_empty|max_length[500]'
         ]
     ];
+    
 
 }

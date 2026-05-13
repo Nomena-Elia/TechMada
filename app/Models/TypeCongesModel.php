@@ -31,4 +31,5 @@ class TypeCongeModel extends Model
             'rules' => 'required|integer'
         ]
     ];
+    
 }
