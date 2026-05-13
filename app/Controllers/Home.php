@@ -6,7 +6,7 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('index');
+        return view('modal', ['page' => 'pages/dashboard-employe']);
     }
 
 }
