@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="/assets/css/style.css"/>
 </head>
 <body>
 
@@ -123,4 +123,42 @@
         </div>
         <table class="tbl">
           <thead>
-            <tr><th>Type</th><th>Du</th><th>Au</th><th>Durée</th><th>Statut</th><th>Action</
+            <tr><th>Type</th><th>Du</th><th>Au</th><th>Durée</th><th>Statut</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="type-badge t-annuel">Annuel</span></td>
+              <td class="td-muted">16 juin 2025</td>
+              <td class="td-muted">20 juin 2025</td>
+              <td class="td-mono">5 j</td>
+              <td><span class="statut s-attente">en attente</span></td>
+              <td><button class="btn-sm btn-cancel"><i class="bi bi-x"></i> Annuler</button></td>
+            </tr>
+            <tr>
+              <td><span class="type-badge t-maladie">Maladie</span></td>
+              <td class="td-muted">2 juin 2025</td>
+              <td class="td-muted">3 juin 2025</td>
+              <td class="td-mono">2 j</td>
+              <td><span class="statut s-approuvee">approuvée</span></td>
+              <td><span class="td-muted" style="font-size:.75rem">—</span></td>
+            </tr>
+            <tr>
+              <td><span class="type-badge t-annuel">Annuel</span></td>
+              <td class="td-muted">12 mai 2025</td>
+              <td class="td-muted">16 mai 2025</td>
+              <td class="td-mono">5 j</td>
+              <td><span class="statut s-approuvee">approuvée</span></td>
+              <td><span class="td-muted" style="font-size:.75rem">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span> — Projet CodeIgniter 4</div>
+  </div>
+
+</div>
+
+</body>
+</html>
