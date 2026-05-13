@@ -6,7 +6,7 @@
     class RoleFilter implements FilterInterface {
         public function before(RequestInterface $request, $arguments = null) {
             $session = session();
-            if(!$session->get('user') || !in_array($session->get('user')['user_role'], $arguments ?? [])) {
+            if(!$session->get('user') || !in_array($session->get('user')['role'], $arguments ?? [])) {
                 return redirect()->back()->with('error', 'Acces refuse! Droits insuffisants');
             }
         }
