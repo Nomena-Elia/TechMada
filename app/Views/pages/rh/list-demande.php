@@ -16,10 +16,12 @@
 
     <div class="content">
 
-      <div class="flash flash-success">
-        <i class="bi bi-check-circle-fill"></i>
-        Demande de Soa Rakoto approuvée. Son solde a été mis à jour automatiquement.
-      </div>
+      <?php if(session()->getFlashData('success')): ?>
+        <div class="flash flash-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <?= session()->getFlashData('success') ?>
+        </div>
+      <?php endif; ?>
 
       <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap">
         <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--forest);background:var(--forest);color:var(--white);cursor:pointer">Tous (8)</button>
@@ -41,32 +43,35 @@
             <tr><th>Employé</th><th>Type</th><th>Période</th><th>Durée</th><th>Solde dispo</th><th>Statut</th><th>Actions</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <div class="profile-row">
-                  <div class="avatar av-green" style="width:32px;height:32px;font-size:.7rem">SR</div>
-                  <div class="profile-info">
-                    <div class="pname">Soa Rakoto</div>
-                    <div class="pdept">IT · 23 juin → 27 juin</div>
-                  </div>
-                </div>
-               </td>
-              <td><span class="type-badge t-annuel">Annuel</span></td>
-              <td class="td-muted" style="font-size:.8rem">23/06 – 27/06/2025</td>
-              <td class="td-mono">5 j</td>
-              <td>
-                <span style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--success);font-weight:500">18 j</span>
-                <span style="font-size:.72rem;color:var(--muted)"> dispo</span>
-               </td>
-              <td><span class="statut s-attente">en attente</span></td>
-              <td>
-                <div class="action-btns">
-                  <button class="btn-sm btn-approve"><i class="bi bi-check-lg"></i> Approuver</button>
-                  <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
-                </div>
-               </td>
-            </tr>
-            <tr>
+            <?php foreach($data as $d) { ?>
+                <tr>
+                    <td>
+                        <div class="profile-row">
+                        <div class="avatar av-green" style="width:32px;height:32px;font-size:.7rem">SR</div>
+                        <div class="profile-info">
+                            <div class="pname"><?= $d['nom'] . "" . $d['prenom'] ?></div>
+                        </div>
+                        </div>
+                    </td>
+                    <td><span class="type-badge t-annuel"><?= $d['libelle'] ?></span></td>
+                    <td class="td-muted" style="font-size:.8rem"><?= $d['date_debut'] ?> → <?= $d['date_fin'] ?></td>
+                    <td class="td-mono"><?= $d['nb_jours'] ?> j</td>
+                    <td>
+                        <span style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--success);font-weight:500"><?= $d['jours_reste'] ?> j</span>
+                        <span style="font-size:.72rem;color:var(--muted)"> dispo</span>
+                    </td>
+                    <td><span class="statut s-attente"><?= $d['statut'] ?></span></td>
+                    <td>
+                        <div class="action-btns">
+                        <form action="/rh/demande/accept/<?= $d['id'] ?>" method="post">
+                            <button class="btn-sm btn-approve"><i class="bi bi-check-lg"></i> Approuver</button>
+                        </form>
+                        <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
+                        </div>
+                    </td>   
+                </tr>
+            <?php } ?>
+            <!-- <tr>
               <td>
                 <div class="profile-row">
                   <div class="avatar av-amber" style="width:32px;height:32px;font-size:.7rem">TF</div>
@@ -129,30 +134,42 @@
               <td><span style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--muted)">—</span></td>
               <td><span class="statut s-approuvee">approuvée</span></td>
               <td><span class="td-muted" style="font-size:.75rem">Traité par Marie R.</span></td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
       </div>
 
-      <div style="margin-top:1.5rem">
-        <div class="form-section" style="border-color:var(--danger-br);background:var(--danger-bg)">
-          <h3 style="color:var(--danger)"><i class="bi bi-x-circle"></i> Confirmer le refus — Tsiry Fidy</h3>
-          <div style="font-size:.875rem;color:var(--ink);margin-bottom:1rem">
-            Demande de <strong>2 jours</strong> du 18 au 19 juin 2025 · Type : Maladie<br>
-            <span style="font-size:.8rem;color:var(--danger)"><i class="bi bi-exclamation-triangle"></i> Solde insuffisant : 1 jour disponible, 2 demandés.</span>
-          </div>
-          <div class="f-group">
-            <label class="f-label">Commentaire pour l'employé (optionnel)</label>
-            <textarea class="f-textarea" placeholder="Ex : Solde insuffisant, veuillez contacter les RH pour un congé sans solde.">Solde insuffisant. Solde maladie restant : 1 jour.</textarea>
-          </div>
-          <div class="form-actions">
-            <button class="btn-sm btn-refuse" style="padding:9px 16px;font-size:.875rem"><i class="bi bi-x-lg"></i> Confirmer le refus</button>
-            <button class="btn-secondary"><i class="bi bi-arrow-left"></i> Annuler</button>
-          </div>
-        </div>
-      </div>
 
     </div>
     <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span></div>
+<script>
+    // On attend que le DOM soit chargé
+    document.addEventListener('DOMContentLoaded', function() {
+        const flashMessage = document.querySelector('.flash');
 
+        if (flashMessage) {
+            // Option 1 : Disparition automatique après 5 secondes
+            setTimeout(() => {
+                dismissFlash(flashMessage);
+            }, 5000);
+
+            // Option 2 : Disparition au clic
+            flashMessage.addEventListener('click', () => {
+                dismissFlash(flashMessage);
+            });
+        }
+    });
+
+    function dismissFlash(element) {
+        // Ajoute une classe pour l'animation de sortie
+        element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        element.style.opacity = "0";
+        element.style.transform = "translateY(-10px)";
+
+        // Supprime l'élément du DOM après l'animation
+        setTimeout(() => {
+            element.remove();
+        }, 6000); 
+    }
+</script>
 <?= $this->endSection() ?>
