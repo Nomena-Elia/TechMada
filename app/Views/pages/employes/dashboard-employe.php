@@ -1,36 +1,6 @@
+<?= $this->extend('pages/employes/sidebar') ?>
 
-<div class="app-wrap">
-
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="sidebar-logo-icon"><i class="bi bi-briefcase"></i></div>
-      <div class="sidebar-brand-name">TechMada RH<span>Espace employé</span></div>
-    </div>
-    <div class="sidebar-section">Menu</div>
-    <ul class="sidebar-nav">
-      <li><a href="page2-dashboard-employe.html" class="active"><i class="bi bi-grid-1x2"></i> Tableau de bord</a></li>
-      <li><a href="page3-form-conge.html"><i class="bi bi-plus-circle"></i> Nouvelle demande</a></li>
-      <li>
-        <a href="page4-mes-conges.html">
-          <i class="bi bi-calendar3"></i> Mes demandes
-          <span class="nav-badge alert">2</span>
-        </a>
-      </li>
-      <li><a href="#"><i class="bi bi-person"></i> Mon profil</a></li>
-    </ul>
-    <div class="sidebar-user">
-      <div class="s-user-row">
-        <div class="avatar av-green">SR</div>
-        <div>
-          <div class="user-name">Soa Rakoto</div>
-          <div class="user-role">Employé · IT</div>
-        </div>
-        <a href="page1-login.html" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
-      </div>
-    </div>
-  </aside>
-
-  <div class="main">
+<?= $this->section('content') ?>
     <div class="topbar">
       <div>
         <div class="topbar-title">Tableau de bord</div>
@@ -144,7 +114,4 @@
 
     </div>
     <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span> — Projet CodeIgniter 4</div>
-  </div>
-
-</div>
-
+<?= $this->endSection() ?>

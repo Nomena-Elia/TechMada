@@ -55,5 +55,18 @@ class SoldeModel extends Model
                     ->findAll();
     }
 
+    public function getSoldesCompletsByEmp($idEmp) {
+        return $this->select('
+                        soldes.*,
+                        employes.nom,
+                        employes.prenom,
+                        types_conge.libelle
+                    ')
+                    ->join('employes', 'employes.id = soldes.employe_id')
+                    ->join('types_conge', 'types_conge.id = soldes.types_conge_id')
+                    ->where('employes.id', $idEmp)
+                    ->findAll();
+    }
+
     
 }

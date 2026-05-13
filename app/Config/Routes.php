@@ -6,7 +6,9 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'AuthController::loginForm');
+$routes->get('/register', 'AuthController::registerForm');
 $routes->post('/login', 'AuthController::login');
+$routes->post('/register', 'AuthController::register');
 
 $routes->group('/employe', function($routes) {
     $routes->get('dashboard', 'EmployeController::home');

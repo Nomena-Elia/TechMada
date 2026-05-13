@@ -11,37 +11,49 @@
         protected $returnType = 'array';
 
         protected $validationRules = [
-            'nom' =>[
-                'label' => 'nom',
-                'rules' => 'required|min_length[2]|max_length[255]'
-            ] ,
-            'prenom' => [
-                'label' => 'prenom',
-                'rules' => 'required|min_length[2]|max_length[255]'
+            'register' => [
+                    'nom' =>[
+                    'label' => 'nom',
+                    'rules' => 'required|min_length[2]|max_length[255]'
+                ] ,
+                'prenom' => [
+                    'label' => 'prenom',
+                    'rules' => 'required|min_length[2]|max_length[255]'
+                ],
+                'email' => [
+                    'label' => 'email',
+                    'rules' => 'required|valid_email|is_unique[employes.email,id,{id}]'
+                ],
+                'passwd' => [
+                    'label' => 'mot de passe',
+                    'rules' => 'required|min_length[6]'
+                ],
+                'role' => [
+                    'label' => 'role',
+                    'rules' => 'required|max_length[255]'
+                ],
+                'department_id' => [
+                    'label' => 'departement',
+                    'rules' => 'required|integer'
+                ],
+                'date_embauche' => [
+                    'label' => 'date d\'embauche',
+                    'rules' => 'required|valid_date'
+                ],
+                'actif' => [
+                    'label' => 'actif',
+                    'rules' => 'required|integer'
+                ],
             ],
-            'email' => [
-                'label' => 'email',
-                'rules' => 'required|valid_email|is_unique[employes.email,id,{id}]'
-            ],
-            'passwd' => [
-                'label' => 'mot de passe',
-                'rules' => 'required|min_length[6]'
-            ],
-            'role' => [
-                'label' => 'role',
-                'rules' => 'required|max_length[255]'
-            ],
-            'department_id' => [
-                'label' => 'departement',
-                'rules' => 'required|integer'
-            ],
-            'date_embauche' => [
-                'label' => 'date d\'embauche',
-                'rules' => 'required|valid_date'
-            ],
-            'actif' => [
-                'label' => 'actif',
-                'rules' => 'required|integer'
+            'login' => [
+                'email' => [
+                    'label' => 'email',
+                    'rules' => 'required|valid_email'
+                ],
+                'passwd' => [
+                    'label' => 'mot de passe',
+                    'rules' => 'required|min_length[6]'
+                ],
             ]
         ];
 
