@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'AuthController::loginForm');
 $routes->get('/register', 'AuthController::registerForm');
 $routes->post('/login', 'AuthController::login');
+$routes->get('/logout', 'AuthController::logout');
 $routes->post('/register', 'AuthController::register');
 
 $routes->group('/employe', function($routes) {

@@ -66,7 +66,9 @@
                         <form action="/rh/demande/accept/<?= $d['id'] ?>" method="post">
                             <button class="btn-sm btn-approve"><i class="bi bi-check-lg"></i> Approuver</button>
                         </form>
-                        <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
+                        <form action="/rh/demande/deny/<?= $d['id'] ?>" method="post">
+                            <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
+                        </form>
                         </div>
                     </td>   
                 </tr>

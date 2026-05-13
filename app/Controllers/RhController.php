@@ -16,7 +16,7 @@ class RhController extends BaseController {
     public function accept($id) {
         $conge = new CongeModel();
         $solde = new SoldeModel();
-        $conge->update($id, ['statut' => 'Approuve']);
+        $conge->update($id, ['statut' => 'Refuse', ['traite_par' => session()->get('user')['id']]]);
         $found = $conge->find($id);
         var_dump($found);
         $currentSolde = $solde
@@ -27,7 +27,16 @@ class RhController extends BaseController {
         $nouveauTotal = $currentSolde['jours_pris'] + $found['nb_jours'];
 
         $solde
-        ->update($currentSolde['id'], ['jours_pris' => $nouveauTotal, 'traite_par' => session()->get('user')['id']]);
+        ->update($currentSolde['id'], ['jours_pris' => $nouveauTotal]);
+        return redirect()->to('/rh/dashboard')->with('success', 'Demande Approuvee');
+    }
+
+    public function deny($id) {
+        $conge = new CongeModel();
+        $solde = new SoldeModel();
+        $conge->update($id, ['statut' => 'Refuse', ['traite_par' => session()->get('user')['id']]]);
+        $found = $conge->find($id);
+        var_dump($found);
         return redirect()->to('/rh/dashboard')->with('success', 'Demande Approuvee');
     }
 
