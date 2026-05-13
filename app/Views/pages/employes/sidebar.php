@@ -46,7 +46,7 @@
             </a>
         </li>
         <li>
-            <a href="<?= base_url('conge/mes-demandes') ?>" class="<?= ($activePage == 'mes-demandes') ? 'active' : '' ?>">
+            <a href="/employe/demandes" class="<?= ($activePage == 'mes-demandes') ? 'active' : '' ?>">
                 <i class="bi bi-calendar3"></i> Mes demandes
                 <span class="nav-badge alert">2</span>
             </a>
