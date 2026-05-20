@@ -23,7 +23,7 @@
             locale: 'en',
 
             headerToolbar: {
-                left: 'prev,next today',
+                left: 'prev,next prevYear,nextYear today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
