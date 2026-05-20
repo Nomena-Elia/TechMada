@@ -77,4 +77,9 @@ class AdminController extends BaseController {
         
     }
 
+    public function getDemandes() {
+        $conge = new CongeModel();
+        $data = $conge->getCongeComplet();
+        return view('pages/admin/list-demande', ['activePage' => 'mes-demandes', 'data' => $data]);
+    }
 }

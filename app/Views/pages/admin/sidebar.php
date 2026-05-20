@@ -32,9 +32,9 @@
         </div>
         <div class="sidebar-section">Gestion</div>
         <ul class="sidebar-nav">
-          <li><a href="page6-dashboard-admin.html" class="active"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
+          <li><a href="/admin/dashboard" class="active"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
           <li>
-            <a href="page5-liste-rh.html">
+            <a href="/admin/demande">
               <i class="bi bi-inbox"></i> Toutes les demandes
               <span class="nav-badge alert">4</span>
             </a>

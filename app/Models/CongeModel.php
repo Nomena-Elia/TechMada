@@ -162,4 +162,12 @@ class CongeModel extends Model
                     ->findAll(3);
     }
 
+    public function getCongeMois(){
+        return $this->build()->select('COUNT(employe_id) as total, DATE_FORMAT(created_at, %Y-%m) as month')
+                    ->groupBy("month")
+                    ->orderBy("month", "DESC")
+                    ->get()
+                    ->getResultArray();
+    }
+
 }

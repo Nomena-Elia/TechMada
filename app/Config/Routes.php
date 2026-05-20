@@ -42,4 +42,5 @@ $routes->group('/admin', ['filter' => 'role:ADMIN'], function($routes) {
     $routes->get('typeconge/(:num)', 'AdminController::getTypeconge/$1');
     $routes->post('typeconge/update/(:num)', 'AdminController::updateTypeconge/$1');
     $routes->post('typeconge/delete/(:num)', 'AdminController::deleteTypeconge/$1');
+    $routes->get('demande', 'AdminController::getDemandes');
 });

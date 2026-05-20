@@ -79,7 +79,8 @@
 
         // Récupère les employés ayant un solde global critique de congés (ex: cumul jours_attribues - jours_pris <= 2)
         public function getSoldesCritiques() {
-            return $db->table('soldes')
+
+            return $this->db->table('soldes')
                     ->select('employe_id')
                     ->groupBy('employe_id')
                     ->having('SUM(jours_attribues) - SUM(jours_pris) <=', 2)
