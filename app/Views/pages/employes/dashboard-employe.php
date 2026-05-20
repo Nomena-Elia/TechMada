@@ -22,8 +22,8 @@
       </div>
       <?php } ?>
 
-      <div class="metrics">
-        <div class="metric">
+       <div class="metrics">
+      <!--  <div class="metric">
           <div class="metric-top"><div class="metric-icon mi-amber"><i class="bi bi-hourglass-split"></i></div></div>
           <div class="metric-val">2</div>
           <div class="metric-label">En attente</div>
@@ -32,19 +32,21 @@
           <div class="metric-top"><div class="metric-icon mi-green"><i class="bi bi-check-circle"></i></div></div>
           <div class="metric-val">5</div>
           <div class="metric-label">Approuvées</div>
-        </div>
-        <div class="metric">
+        </div> -->
+        <!-- <div class="metric">
           <div class="metric-top"><div class="metric-icon mi-forest"><i class="bi bi-calendar-check"></i></div></div>
           <div class="metric-val">18</div>
           <div class="metric-label">Jours restants</div>
           <div class="metric-sub">sur 30 cette année</div>
+        </div> -->
+        <?php foreach($conges as $c): ?>
+          <div class="metric">
+            <div class="metric-top"><div class="metric-icon mi-green"><i class="bi bi-check-circle"></i></div></div>
+            <div class="metric-val"><?= $c['totalCount'] ?></div>
+            <div class="metric-label"><?= $c['statut'] ?></div>
+          </div> 
+          <?php endforeach; ?>
         </div>
-        <div class="metric">
-          <div class="metric-top"><div class="metric-icon mi-red"><i class="bi bi-x-circle"></i></div></div>
-          <div class="metric-val">1</div>
-          <div class="metric-label">Refusée</div>
-        </div>
-      </div>
 
       <div class="data-card">
         <div class="data-card-head"><h3>Mes soldes de congés — 2025</h3></div>
@@ -81,14 +83,14 @@
       <div class="data-card">
         <div class="data-card-head">
           <h3>Mes dernières demandes</h3>
-          <a href="page4-mes-conges.html" style="font-size:.8rem;color:var(--forest);text-decoration:none">Voir tout →</a>
+          <a href="/employe/demandes" style="font-size:.8rem;color:var(--forest);text-decoration:none">Voir tout →</a>
         </div>
         <table class="tbl">
           <thead>
             <tr><th>Type</th><th>Du</th><th>Au</th><th>Durée</th><th>Statut</th><th>Action</th></tr>
           </thead>
           <tbody>
-            <tr>
+            <!-- <tr>
               <td><span class="type-badge t-annuel">Annuel</span></td>
               <td class="td-muted">16 juin 2025</td>
               <td class="td-muted">20 juin 2025</td>
@@ -103,21 +105,23 @@
               <td class="td-mono">2 j</td>
               <td><span class="statut s-approuvee">approuvée</span></td>
               <td><span class="td-muted" style="font-size:.75rem">—</span></td>
-            </tr>
-            <tr>
-              <td><span class="type-badge t-annuel">Annuel</span></td>
-              <td class="td-muted">12 mai 2025</td>
-              <td class="td-muted">16 mai 2025</td>
-              <td class="td-mono">5 j</td>
-              <td><span class="statut s-approuvee">approuvée</span></td>
-              <td><span class="td-muted" style="font-size:.75rem">—</span></td>
-            </tr>
+            </tr> -->
+            <?php foreach($last as $l): ?>
+              <tr>
+                <td><span class="type-badge t-annuel"><?= $l['libelle'] ?></span></td>
+                <td class="td-muted"><?= $l['date_debut'] ?></td>
+                <td class="td-muted"><?= $l['date_fin'] ?></td>
+                <td class="td-mono"><?= $l['nb_jours'] ?></td>
+                <td><span class="statut s-approuvee"><?= $l['statut'] ?></span></td>
+                <td><span class="td-muted" style="font-size:.75rem">—</span></td>
+              </tr>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
 
     </div>
-    <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span> — Projet CodeIgniter 4</div>
+    <div class="footer-app"><i class="bi bi-c-circle"></i> 2026 <span>TechMada RH</span> — Projet CodeIgniter 4</div>
     <script>
     // On attend que le DOM soit chargé
     document.addEventListener('DOMContentLoaded', function() {

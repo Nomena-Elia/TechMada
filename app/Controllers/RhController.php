@@ -16,7 +16,7 @@ class RhController extends BaseController {
     public function accept($id) {
         $conge = new CongeModel();
         $solde = new SoldeModel();
-        $conge->update($id, ['statut' => 'Refuse', ['traite_par' => session()->get('user')['id']]]);
+        $conge->update($id, ['statut' => 'Approuve', ['traite_par' => session()->get('user')['id']]]);
         $found = $conge->find($id);
         var_dump($found);
         $currentSolde = $solde

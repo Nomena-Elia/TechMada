@@ -9,7 +9,7 @@
       </div>
       <div class="topbar-actions">
         <span style="font-size:.8rem;color:var(--muted);background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:6px;padding:5px 10px;display:flex;align-items:center;gap:5px;color:var(--warn)">
-          <i class="bi bi-hourglass-split"></i> 4 en attente
+          <i class="bi bi-hourglass-split"></i> <?= count($data) ?> en attente
         </span>
       </div>
     </div>
@@ -24,10 +24,10 @@
       <?php endif; ?>
 
       <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap">
-        <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--forest);background:var(--forest);color:var(--white);cursor:pointer">Tous (8)</button>
-        <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">En attente (4)</button>
+        <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--forest);background:var(--forest);color:var(--white);cursor:pointer">En Attente (<?= count($data) ?>)</button>
+        <!-- <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">En attente (4)</button>
         <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">Approuvées (3)</button>
-        <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">Refusées (1)</button>
+        <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">Refusées (1)</button> -->
         <select class="f-select" style="font-size:.8rem;padding:6px 10px;width:auto;margin-left:auto">
           <option>Tous les départements</option>
           <option>IT</option>
@@ -49,7 +49,7 @@
                         <div class="profile-row">
                         <div class="avatar av-green" style="width:32px;height:32px;font-size:.7rem">SR</div>
                         <div class="profile-info">
-                            <div class="pname"><?= $d['nom'] . "" . $d['prenom'] ?></div>
+                            <div class="pname"><?= $d['nom'] . " " . $d['prenom'] ?></div>
                         </div>
                         </div>
                     </td>
@@ -63,9 +63,11 @@
                     <td><span class="statut s-attente"><?= $d['statut'] ?></span></td>
                     <td>
                         <div class="action-btns">
-                        <form action="/rh/demande/accept/<?= $d['id'] ?>" method="post">
+                        <?php if($d['nb_jours'] < $d['jours_reste']): ?>
+                          <form action="/rh/demande/accept/<?= $d['id'] ?>" method="post">
                             <button class="btn-sm btn-approve"><i class="bi bi-check-lg"></i> Approuver</button>
-                        </form>
+                          </form>
+                        <?php endif; ?>
                         <form action="/rh/demande/deny/<?= $d['id'] ?>" method="post">
                             <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
                         </form>

@@ -67,8 +67,7 @@ class CongeModel extends Model
         ],
     ];
 
-    public function getCongeComplet()
-    {
+    public function getCongeComplet($emp) {
         return $this->select('
                         conges.*,
                         employes.nom,
@@ -77,6 +76,21 @@ class CongeModel extends Model
                     ')
                     ->join('employes', 'employes.id = conges.employe_id')
                     ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->where('conges.employe_id', $emp)
+                    ->findAll();
+    }
+
+    public function getCongeLast($idEmp) {
+        return $this->select('
+                        conges.*,
+                        employes.nom,
+                        employes.prenom,
+                        types_conge.libelle
+                    ')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->where('conges.employe_id', $idEmp)
+                    ->limit(3, 0)
                     ->findAll();
     }
 
@@ -94,6 +108,16 @@ class CongeModel extends Model
                     ->join('soldes', 'soldes.employe_id = conges.employe_id AND soldes.types_conge_id=conges.types_conge_id')
                     ->where('conges.statut', 'En attente')
                     ->findAll();
+    }
+
+    public function getCongesByEmp($idEmp) {
+        return $this->builder()
+        ->select('statut')
+        ->selectCount('conges.id', 'totalCount')
+        ->groupBy('statut')
+        ->where('conges.employe_id', $idEmp)
+        ->get()
+        ->getResultArray();
     }
     
     public function getAbsencesMoisEnCours() {

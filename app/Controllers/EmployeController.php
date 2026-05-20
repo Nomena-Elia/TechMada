@@ -9,8 +9,11 @@ use DateTime;
 class EmployeController extends BaseController {
     public function home() {
         $solde = new SoldeModel();
-        $data = $solde->getSoldesCompletsByEmp(session('user')['id']);
-        return view('pages/employes/dashboard-employe', ['activePage' => 'dashboard', 'data' => $data]);
+        $conge = new CongeModel();
+        $data = $solde->getSoldesCompletsByEmp(session()->get('user')['id']);
+        $conges = $conge->getCongesByEmp(session()->get('user')['id']);
+        $last = $conge->getCongeLast(session()->get('user')['id']);
+        return view('pages/employes/dashboard-employe', ['activePage' => 'dashboard', 'data' => $data, 'conges' => $conges, 'last' => $last]);
     }
 
     public function demandeForm() {
@@ -21,7 +24,7 @@ class EmployeController extends BaseController {
 
     public function getDemandes() {
         $conge = new CongeModel();
-        $data = $conge->getCongeComplet();
+        $data = $conge->getCongeComplet(session()->get('user')['id']);
         return view('pages/employes/list-demande', ['activePage' => 'mes-demandes', 'data' => $data]);
     }
 
@@ -31,7 +34,7 @@ class EmployeController extends BaseController {
         $date1 = new DateTime($postData['date_debut']);
         $date2 = new DateTime($postData['date_fin']);
         $interval = $date1->diff($date2);
-        $nbdays = (int) $interval->format('%R%a');
+        $nbdays = (int) $interval->format('%R%a') + 1;
         $errors = [];
         if($nbdays < 0) {
             $errors['date_debut'] = "La date debut doit etre anterieure a date fin";
