@@ -5,6 +5,13 @@
 <?=  $this->endSection() ?>
 
 <?= $this->section('content')?>
+<?php
+
+$error = session()->getFlashData('errors');
+var_dump($error);
+$success = session()->getFlashData('success');
+
+?>
 <div class="main">
   <div class="topbar">
     <div>
@@ -21,44 +28,57 @@
     <!-- SECTION : FORMULAIRE DE CRÉATION DE L'EMPLOYÉ -->
     <div class="form-section">
       <h3><i class="bi bi-person-plus" style="color:var(--forest);margin-right:6px"></i>Ajouter un employé</h3>
-      <form action="/admin/employe/store" method="post">
+      <form action="/admin/employe/add" method="post">
+        <?php if(!empty($success)){?>
+          <div class="alert alert-success">
+            <?= $success ?>
+          </div>
+        </div>
+        <?php }?>
         <div class="form-grid-2" style="margin-bottom:1rem">
           <div class="f-group">
             <label class="f-label">Prénom</label>
-            <input type="text" name="prenom" class="f-input" placeholder="Jean"/>
+            <input type="text" name="prenom" class="f-input <?= !empty($error['prenom']) ? 'is-invalid' : ''?> " placeholder="Jean"/>
+            <span class="invalid-feedback"><?= $error['prenom'] ?? '' ?></span>
           </div>
           <div class="f-group">
             <label class="f-label">Nom</label>
-            <input type="text" name="nom" class="f-input" placeholder="Rakoto"/>
+            <input type="text" name="nom" class="f-input <?= !empty($error['nom']) ? 'is-invalid' : ''?>" placeholder="Rakoto"/>
+            <span class="invalid-feedback"><?= $error['nom'] ?? '' ?></span>
           </div>
           <div class="f-group">
             <label class="f-label">Email</label>
-            <input type="email" name="email" class="f-input" placeholder="jean.rakoto@techmada.mg"/>
+            <input type="email" name="email" class="f-input <?= !empty($error['email']) ? 'is-invalid' : ''?>" placeholder="jean.rakoto@techmada.mg"/>
+            <span class="invalid-feedback"><?= $error['email'] ?? '' ?></span>
           </div>
           <div class="f-group">
             <label class="f-label">Mot de passe initial</label>
-            <input type="password" name="passwd" class="f-input" placeholder="À communiquer à l'employé"/>
+            <input type="password" name="passwd" class="f-input <?= !empty($error['passwd']) ? 'is-invalid' : ''?>" placeholder="À communiquer à l'employé"/>
+            <span class="invalid-feedback"><?= $error['passwd'] ?? '' ?></span>
           </div>
           <div class="f-group">
             <label class="f-label">Département</label>
-            <select name="departement" class="f-select">
+            <select name="department_id" class="f-select is-invalid">
               <?php foreach($departments as $dept) {?>
                 <option value="<?= $dept['id'] ?>"><?= $dept['nom'] ?></option>
               <?php }?>
               
             </select>
+            <span class="invalid-feedback"><?= $error['department_id'] ?? '' ?></span>
           </div>
           <div class="f-group">
             <label class="f-label">Rôle</label>
             <select name = "role" class="f-select">
               <?php foreach($roles as $role) {?>
-                <option value="<?= esc($role) ?>"><?= esc(ucfirst($role)) ?></option>
+                <option value="<?= $role ?>"><?= $role ?></option>
               <?php }?>
             </select>
           </div>
+          <input type="hidden" name="actif" value="1">
           <div class="f-group">
             <label class="f-label">Date d'embauche</label>
-            <input type="date" class="f-input" value="2025-06-13"/>
+            <input type="date" name="date_embauche" class="f-input  <?= !empty($error['date_embauche']) ? 'is-invalid' : ''?>" value="2025-06-13"/>
+            <span class="invalid-feedback"><?= $error['date_embauche'] ?? '' ?></span>
           </div>
         </div>
         <div class="flash flash-info" style="margin-bottom:1rem">
@@ -66,13 +86,13 @@
           <span style="font-size:.82rem">Les soldes de congés seront initialisés automatiquement selon les types de congé configurés.</span>
         </div>
         <div class="form-actions">
-          <button class="btn-forest"><i class="bi bi-plus"></i><a href="/admin/employe/store">Creer l'employe</a></button>
+          <a href="/admin/employe/add"><button class="btn-forest"><i class="bi bi-plus"></i>Creer l'employe</button></a>
           <button class="btn-secondary" disabled>Réinitialiser</button>
         </div>
       </div>
       </form>
 
-    <!-- SECTION EN COMMENTAIRE : LISTE ET FILTRES (HORS CRÉATION) 
+    <!-- SECTION EN COMMENTAIRE : LISTE ET FILTRES (HORS CRÉATION)  -->
     <div class="data-card">
       <div class="data-card-head">
         <h3>Tous les employés</h3>
@@ -149,7 +169,7 @@
         </tbody>
       </table>
     </div>
-    -->
+   
 
   </div>
   <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span></div>
