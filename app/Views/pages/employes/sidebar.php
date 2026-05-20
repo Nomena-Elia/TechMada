@@ -11,6 +11,7 @@
     
     <!-- Votre fichier CSS principal -->
     <link rel="stylesheet" href="/assets/css/style.css">
+    <?= $this->renderSection('css') ?>
     
     <style>
         /* Styles spécifiques à la sidebar si vous ne les avez pas dans style.css */
@@ -56,6 +57,11 @@
                 <i class="bi bi-person"></i> Mon profil
             </a>
         </li>
+        <li>
+            <a href="/employe/calendar" class="<?= ($activePage == 'calendar') ? 'active' : '' ?>">
+                <i class="bi bi-calendar"></i> Calendrier
+            </a>
+        </li>
     </ul>
 
     <div class="sidebar-user">
@@ -76,5 +82,6 @@
     <?= $this->renderSection('content') ?>
 </div>
     </div>
+    
 </body>
 </html>

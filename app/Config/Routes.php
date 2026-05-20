@@ -17,6 +17,7 @@ $routes->group('/employe', ['filter' => 'role:ADMIN,EMPLOYE,RH'], function($rout
     $routes->post('new-demande', 'EmployeController::submitDemande');
     $routes->get('demandes', 'EmployeController::getDemandes');
     $routes->get('profil', 'EmployeController::profile');
+    $routes->get('calendar', 'EmployeController::renderCalendar');
 });
 
 $routes->group('/rh', ['filter' => 'role:RH'], function($routes) {

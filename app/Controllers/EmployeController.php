@@ -47,4 +47,10 @@ class EmployeController extends BaseController {
         return redirect()->to('/employe/dashboard')->with('success', 'Votre demande de congé a bien été soumise. Elle est en attente de validation.');
     }
 
+    public function renderCalendar() {
+        $conge = new CongeModel();
+        $data = $conge->where('employe_id', session()->get('user')['id'])->findAll();
+        return view('pages/employes/calendar', ['activePage' => 'calendar', 'data' => $data]);
+    }
+
 }
