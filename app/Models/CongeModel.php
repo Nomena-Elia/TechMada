@@ -80,6 +80,24 @@ class CongeModel extends Model
                     ->findAll();
     }
 
+    public function getAllCongeComplet($statut = null) {
+        $builder = $this->select('
+                        conges.*,
+                        employes.nom,
+                        employes.prenom,
+                        types_conge.libelle,
+                        (soldes.jours_attribues - soldes.jours_pris) as jours_reste
+                    ')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->join('soldes', 'soldes.employe_id = conges.employe_id AND soldes.types_conge_id=conges.types_conge_id');
+                    
+        if($statut !== null) {
+            $builder->where('conges.statut', $statut);
+        }
+        return $builder->findAll();
+    }
+
     public function getCongeLast($idEmp) {
         return $this->select('
                         conges.*,
@@ -116,6 +134,15 @@ class CongeModel extends Model
         ->selectCount('conges.id', 'totalCount')
         ->groupBy('statut')
         ->where('conges.employe_id', $idEmp)
+        ->get()
+        ->getResultArray();
+    }
+
+    public function getCountByStatut() {
+        return $this->builder()
+        ->select('statut')
+        ->selectCount('conges.id', 'totalCount')
+        ->groupBy('statut')
         ->get()
         ->getResultArray();
     }

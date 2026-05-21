@@ -1,3 +1,5 @@
+<?php helper('user'); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -67,9 +69,9 @@
     <div class="sidebar-user">
         <div class="s-user-row">
             <!-- On peut dynamiser ces données plus tard avec la session -->
-            <div class="avatar av-green">EMP</div>
+            <div class="avatar av-green"><?= format_username(session()->get('user')['nom'], session()->get('user')['prenom']) ?></div>
             <div>
-                <div class="user-name"><?= session()->get('user')['nom'] . " " . session()->get('user')['prenom'] ?></div>
+                <div class="user-name"><?= concat_name(session()->get('user')['nom'], session()->get('user')['prenom']  ) ?></div>
                 <div class="user-role">Employé · IT</div>
             </div>
             <a href="/logout" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion">

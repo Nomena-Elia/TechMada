@@ -9,8 +9,9 @@ use DateTime;
 class RhController extends BaseController {
     public function home() {
         $conge = new CongeModel();
-        $data = $conge->getCongeEnAttente();
-        return view('pages/rh/list-demande', ['data' => $data]);
+        $all = $conge->getAllCongeComplet($this->request->getGet('statut'));
+        $count = $conge->getCountByStatut();
+        return view('pages/rh/list-demande', ['count' => $count, 'all' => $all, 'filter' => $this->request->getGet('statut')]);
     }
 
     public function accept($id) {
