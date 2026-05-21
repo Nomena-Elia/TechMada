@@ -176,4 +176,13 @@ class CongeModel extends Model
         return $this->builder()->select('');
     }
 
+    public function isChevauching($date_debut, $date_fin) {
+        $data = $this->select('id')
+        ->where('date_debut <= ', $date_fin)
+        ->where('date_fin >= ', $date_debut)
+        ->where('statut !=', 'Refuse')
+        ->first();
+        return !empty($data);
+    }
+
 }

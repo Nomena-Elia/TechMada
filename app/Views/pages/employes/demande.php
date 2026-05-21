@@ -20,6 +20,12 @@
 
     <div class="content">
 
+    <?php if(session()->get('error')) { ?>
+        <div class="flash flash-error">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <?= session()->get('error') ?>
+      </div>
+    <?php } ?>
       <div class="form-layout">
 
         <div>
@@ -46,12 +52,12 @@
             <div class="form-grid-2" style="margin-bottom:1rem">
               <div class="f-group">
                 <label class="f-label">Date de début <span style="color:var(--danger)">*</span></label>
-                <input type="date" id="date1" name="date_debut" class="f-input is-invalid" value="<?php echo old('date_debut') ?? '2025-06-23' ?>"/>
+                <input type="date" id="date1" name="date_debut" class="f-input is-invalid" value="<?php echo old('date_debut') ?? '2026-06-23' ?>"/>
                 <span class="invalid-feedback"><?= $errors['date_debut'] ?? '' ?></span>
               </div>
               <div class="f-group">
                 <label class="f-label">Date de fin <span style="color:var(--danger)">*</span></label>
-                <input type="date" id="date2" name="date_fin" class="f-input is-invalid" value="<?php echo old('date_fin') ?? '2025-06-27' ?>"/>
+                <input type="date" id="date2" name="date_fin" class="f-input is-invalid" value="<?php echo old('date_fin') ?? '2026-06-27' ?>"/>
                 <span class="invalid-feedback"><?= $errors['date_fin'] ?? '' ?></span>
               </div>
             </div>
