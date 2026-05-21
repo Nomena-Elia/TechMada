@@ -26,7 +26,7 @@
         <aside class="sidebar">
         <div class="sidebar-brand">
           <div class="sidebar-logo-icon" style="background:var(--ink);border:1px solid rgba(255,255,255,.15)"><i class="bi bi-shield-check" style="color:var(--leaf)"></i></div>
-          <div class="sidebar-brand-name">TechMada RH
+          <div class="sidebar-brand-name">TechMada Admin
             <span>Administration</span>
           </div>
         </div>
@@ -54,9 +54,9 @@
         </div>
       </aside>
 
-      <main class="content-area">
-          <?= $this->renderSection('content') ?>
-      </main>
+    <div class="main">
+        <?= $this->renderSection('content') ?>
+    </div>
     
     </div>
   

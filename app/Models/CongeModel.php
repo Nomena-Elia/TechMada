@@ -173,8 +173,22 @@ class CongeModel extends Model
     }
 
     public function getJourConge(){
-        return $this->builder()->select('');
+        return $this->builder()->select('COUNT(employe_id) as total, strftime("%w", created_at) as week, case strftime("%w", created_at) 
+                            when "0" then "Dimanche"
+                            when "1" then "Lundi"
+                            when "2" then "Mardi"
+                            when "3" then "Mercredi"
+                            when "4" then "Jeudi"
+                            when "5" then "Vendredi"
+                            when "6" then "Samedi"
+                        end as jourSemaine')
+                    ->where('statut', 'Approuve')
+                    ->groupBy('week')
+                    ->orderBy('week', 'DESC')
+                    ->get()
+                    ->getResultArray();
     }
+
 
     public function isChevauching($date_debut, $date_fin) {
         $data = $this->select('id')
