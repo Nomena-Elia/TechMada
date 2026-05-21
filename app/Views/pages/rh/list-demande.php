@@ -1,3 +1,5 @@
+<?php helper('user') ?>
+
 <?= $this->extend('pages/rh/sidebar'); ?>
 
 <?= $this->section('content') ?>
@@ -9,7 +11,7 @@
       </div>
       <div class="topbar-actions">
         <span style="font-size:.8rem;color:var(--muted);background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:6px;padding:5px 10px;display:flex;align-items:center;gap:5px;color:var(--warn)">
-          <i class="bi bi-hourglass-split"></i> <?= count($data) ?> en attente
+          <i class="bi bi-hourglass-split"></i> <?= $count[0]['totalCount'] ?? 0 ?> en attente
         </span>
       </div>
     </div>
@@ -24,7 +26,14 @@
       <?php endif; ?>
 
       <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap">
-        <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--forest);background:var(--forest);color:var(--white);cursor:pointer">En Attente (<?= count($data) ?>)</button>
+        <a href="/rh/dashboard" class="text-decoration-none">
+          <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--forest);<?= $filter == null ? 'background:var(--forest);color:var(--white);' : '' ?>cursor:pointer">Tous</button>
+        </a>
+        <?php foreach($count as $c) { ?>
+          <a href="/rh/dashboard?statut=<?= $c['statut'] ?>" class="text-decoration-none">
+            <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--forest);<?= $filter == $c['statut'] ? 'background:var(--forest);color:var(--white);' : '' ?>cursor:pointer"><?= $c['statut'] ?> (<?= $c['totalCount'] ?>)</button>
+          </a>
+        <?php } ?>
         <!-- <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">En attente (4)</button>
         <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">Approuvées (3)</button>
         <button style="padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer">Refusées (1)</button> -->
@@ -43,13 +52,13 @@
             <tr><th>Employé</th><th>Type</th><th>Période</th><th>Durée</th><th>Solde dispo</th><th>Statut</th><th>Actions</th></tr>
           </thead>
           <tbody>
-            <?php foreach($data as $d) { ?>
+            <?php foreach($all as $d) { ?>
                 <tr>
                     <td>
                         <div class="profile-row">
-                        <div class="avatar av-green" style="width:32px;height:32px;font-size:.7rem">SR</div>
+                        <div class="avatar av-green" style="width:32px;height:32px;font-size:.7rem"><?= format_username($d['nom'], $d['prenom']  ) ?></div>
                         <div class="profile-info">
-                            <div class="pname"><?= $d['nom'] . " " . $d['prenom'] ?></div>
+                            <div class="pname"><?= concat_name($d['nom'],$d['prenom']) ?></div>
                         </div>
                         </div>
                     </td>
@@ -62,16 +71,18 @@
                     </td>
                     <td><span class="statut s-attente"><?= $d['statut'] ?></span></td>
                     <td>
-                        <div class="action-btns">
-                        <?php if($d['nb_jours'] < $d['jours_reste']): ?>
-                          <form action="/rh/demande/accept/<?= $d['id'] ?>" method="post">
-                            <button class="btn-sm btn-approve"><i class="bi bi-check-lg"></i> Approuver</button>
-                          </form>
+                        <?php if($d['statut'] === 'En attente') : ?>
+                          <div class="action-btns">
+                            <?php if($d['nb_jours'] < $d['jours_reste']): ?>
+                              <form action="/rh/demande/accept/<?= $d['id'] ?>" method="post">
+                                <button class="btn-sm btn-approve"><i class="bi bi-check-lg"></i> Approuver</button>
+                              </form>
+                            <?php endif; ?>
+                            <form action="/rh/demande/deny/<?= $d['id'] ?>" method="post">
+                                <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
+                            </form>
+                          </div>
                         <?php endif; ?>
-                        <form action="/rh/demande/deny/<?= $d['id'] ?>" method="post">
-                            <button class="btn-sm btn-refuse"><i class="bi bi-x-lg"></i> Refuser</button>
-                        </form>
-                        </div>
                     </td>   
                 </tr>
             <?php } ?>
