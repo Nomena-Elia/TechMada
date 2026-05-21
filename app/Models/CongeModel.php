@@ -163,11 +163,17 @@ class CongeModel extends Model
     }
 
     public function getCongeMois(){
-        return $this->build()->select('COUNT(employe_id) as total, DATE_FORMAT(created_at, %Y-%m) as month')
-                    ->groupBy("month")
-                    ->orderBy("month", "DESC")
-                    ->get()
-                    ->getResultArray();
+        return $this->builder()
+                ->select('COUNT(employe_id) as total, strftime(\'%Y-%m\', created_at) as month')
+                ->where('statut', 'Approuve')
+                ->groupBy("month")
+                ->orderBy("month", "DESC")
+                ->get()
+                ->getResultArray();
+    }
+
+    public function getJourConge(){
+        return $this->builder()->select('');
     }
 
 }

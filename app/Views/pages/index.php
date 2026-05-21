@@ -35,6 +35,7 @@
     </div>
     <div class="auth-roles">
       <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.25);margin-bottom:4px">Comptes de démonstration</div>
+      <?php //phpinfo()?>
       <div class="role-pill">
         <i class="bi bi-shield-check"></i>
         <div><div class="role-pill-name">Administrateur</div><div class="role-pill-cred">admin@techmada.mg · admin123</div></div>

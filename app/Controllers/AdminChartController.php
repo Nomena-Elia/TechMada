@@ -15,14 +15,14 @@
             $total = [];
 
             foreach($data as $d){
-                $label = $d['month'];
-                $total = $d['total'];
+                $label[] = $d['month'];
+                $total[] = $d['total'];
             }
 
             $data['chartLabel'] = json_encode($label);
             $data['chartData'] = json_encode($total);
 
-            return view('/admin/tableau-bord', ['data' => $data]);
+            return view('/pages/admin/tableau-bord',  $data);
         }
     }
 

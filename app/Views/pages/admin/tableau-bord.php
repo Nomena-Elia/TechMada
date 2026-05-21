@@ -1,8 +1,11 @@
 <?= $this->extend('pages/admin/sidebar')?>
-
+<?= $this->section('css')?>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<?=  $this->endSection() ?>
 <?= $this->section('content')?>
 
-<div class="main">
+<div class="main col-12">
   <div class="topbar">
     <div>
       <div class="topbar-title">Gestion des employés</div>
@@ -15,10 +18,16 @@
 
   <div class="content">
 
-  
+    <div class="chart">
+      <h3>Les conges par mois</h3>
+      <div class="chart-wrapper">
+        <canvas id="congeMois" data-labels='<?= $chartLabel?>' data-values='<?= $chartData?>'></canvas>
+      </div>
+    </div>
 
   </div>
   <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span></div>
 </div>
+<script src="<?= base_url("assets/js/tableau-bord.js")?>"></script>
 
 <?= $this->endSection() ?>

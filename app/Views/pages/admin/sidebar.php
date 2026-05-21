@@ -40,9 +40,10 @@
             </a>
           </li>
           <li><a href="/admin/employe"><i class="bi bi-people"></i> Employés</a></li>
-          <li><a href="/admin/department"><i class="bi bi-building"></i> Départements</a></li>
-          <li><a href="/admin/typeconge"><i class="bi bi-tags"></i> Types de congé</a></li>
+          <li><a href="#"><i class="bi bi-building"></i> Départements</a></li>
+          <li><a href="#"><i class="bi bi-tags"></i> Types de congé</a></li>
           <li><a href="#"><i class="bi bi-sliders"></i> Soldes annuels</a></li>
+          <li><a href="/admin/tableau-bord"><i class="bi bi-sliders"></i> Tableau de bord </a></li>
         </ul>
         <div class="sidebar-user">
           <div class="s-user-row">

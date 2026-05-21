@@ -43,4 +43,5 @@ $routes->group('/admin', ['filter' => 'role:ADMIN'], function($routes) {
     $routes->post('typeconge/update/(:num)', 'AdminController::updateTypeconge/$1');
     $routes->post('typeconge/delete/(:num)', 'AdminController::deleteTypeconge/$1');
     $routes->get('demande', 'AdminController::getDemandes');
+    $routes->get('tableau-bord', 'AdminChartController::CongeMois');
 });
