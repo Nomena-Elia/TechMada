@@ -29,11 +29,33 @@
             },
 
             events: [
-                <?php foreach($data as $d) : ?>
+                <?php foreach($data as $d) : 
+                    $color = "";
+                    $textColor = "";
+                    switch ($d['statut']) {
+                        case 'En attente':
+                            $color = "#f5ebd7";
+                            $textColor = "#b8750a";
+                            break;
+                        case 'Refuse':
+                            $color = "#fdf0ee";
+                            $textColor = "#c0392b";
+                            break;
+                        case 'Approuve':
+                            $color = "#edf7f2";
+                            $textColor = "#1e6b3f";
+                            break;
+                        default:
+                            # code...
+                            break;
+                    }
+                    ?>
                     {
                         title: 'Conge - Statut: <?= $d['statut'] ?>',
                         start: '<?= $d['date_debut'] ?>',
-                        end: '<?= $d['date_fin'] ?>'
+                        end: '<?= $d['date_fin'] ?>',
+                        color: '<?= $color ?>',
+                        textColor: '<?= $textColor ?>'
                     },
                 <?php endforeach ?>
             ]

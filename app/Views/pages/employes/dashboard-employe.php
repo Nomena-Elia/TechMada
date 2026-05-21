@@ -49,7 +49,7 @@
         </div>
 
       <div class="data-card">
-        <div class="data-card-head"><h3>Mes soldes de congés — 2025</h3></div>
+        <div class="data-card-head"><h3>Mes soldes de congés — 2026</h3></div>
         <div style="padding:1rem 1.25rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem">
           <?php foreach($data as $d) { ?>
             <div class="solde-card" style="margin:0">
@@ -106,13 +106,29 @@
               <td><span class="statut s-approuvee">approuvée</span></td>
               <td><span class="td-muted" style="font-size:.75rem">—</span></td>
             </tr> -->
-            <?php foreach($last as $l): ?>
+            <?php foreach($last as $l): 
+              $className = "";
+              switch ($l['statut']) {
+                case 'En attente':
+                  $className = "s-attente";
+                  break;
+                case 'Refuse':
+                  $className = "s-refusee";
+                  break;
+                case 'Approuve':
+                  $className = "s-approuvee";
+                  break;
+                default:
+                  # code...
+                  break;
+              }
+              ?>
               <tr>
                 <td><span class="type-badge t-annuel"><?= $l['libelle'] ?></span></td>
                 <td class="td-muted"><?= $l['date_debut'] ?></td>
                 <td class="td-muted"><?= $l['date_fin'] ?></td>
                 <td class="td-mono"><?= $l['nb_jours'] ?></td>
-                <td><span class="statut s-approuvee"><?= $l['statut'] ?></span></td>
+                <td><span class="statut <?= $className ?>"><?= $l['statut'] ?></span></td>
                 <td><span class="td-muted" style="font-size:.75rem">—</span></td>
               </tr>
             <?php endforeach; ?>

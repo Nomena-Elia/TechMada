@@ -31,19 +31,22 @@ class EmployeController extends BaseController {
     public function submitDemande() {
         $postData = $this->request->getPost();
         $postData['employe_id'] = session()->get('user')['id'];
+        $conge = new CongeModel();
         $date1 = new DateTime($postData['date_debut']);
         $date2 = new DateTime($postData['date_fin']);
         $interval = $date1->diff($date2);
-        $nbdays = (int) $interval->format('%R%a') + 1;
+        $nbdays = (int) $interval->format('%R%a');
         $errors = [];
         if($nbdays < 0) {
             $errors['date_debut'] = "La date debut doit etre anterieure a date fin";
             $errors['date_fin'] = "La date fin doit etre superieure a date debut";
             return redirect()->back()->withInput()->with('errors', $errors);
+            }
+        if($conge->isChevauching($postData['date_debut'], $postData['date_fin'])) {
+            return redirect()->back()->withInput()->with('error', 'Chevauchement avec un autre conge');
         }
         $postData['nb_jours'] = $nbdays;
         $postData['statut'] = 'En attente';
-        $conge = new CongeModel();
         if(!$conge->save($postData)) {
             return redirect()->back()->withInput()->with('errors', $conge->errors());
         }
