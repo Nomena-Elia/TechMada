@@ -32,12 +32,15 @@ $routes->group('/admin', ['filter' => 'role:ADMIN'], function($routes) {
     $routes->get('employe', 'AdminController::getEmployes'); //ok
     $routes->get('employe/(:num)', 'AdminController::getEmploye/$1'); 
     $routes->post('employe/add', 'AdminController::addEmploye');
-    $routes->post('employe/update/(:num)', 'AdminController::updateEmploye/$1');
-    $routes->post('employe/delete/(:num)', 'AdminController::deleteEmploye/$1');
-    $routes->get('deparment', 'AdminController::getDeparments');
-    $routes->get('deparment/(:num)', 'AdminController::getDeparment/$1');
-    $routes->post('deparment/update/(:num)', 'AdminController::updateDeparment/$1');
-    $routes->post('deparment/delete/(:num)', 'AdminController::deleteDeparment/$1');
+    $routes->get('employe/update/(:num)', 'AdminController::updateEmployeForm/$1');
+    $routes->post('employe/updated/(:num)', 'AdminController::updateEmploye/$1');
+    $routes->get('employe/delete/(:num)', 'AdminController::deleteEmploye/$1');
+    $routes->get('employe/reactivate/(:num)', 'AdminController::reactivateEmploye/$1');
+    $routes->get('department', 'AdminController::getDepartments');
+    $routes->post('department/add', 'AdminController::addDepartment');
+    $routes->get('department/(:num)', 'AdminController::getDepartment/$1');
+    $routes->post('department/update/(:num)', 'AdminController::updateDepartment/$1');
+    $routes->get('department/delete/(:num)', 'AdminController::deleteDepartment/$1');
     $routes->get('typeconge', 'AdminController::getTypeconges');
     $routes->get('typeconge/(:num)', 'AdminController::getTypeconge/$1');
     $routes->post('typeconge/update/(:num)', 'AdminController::updateTypeconge/$1');
