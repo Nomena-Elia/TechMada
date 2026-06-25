@@ -1,5 +1,7 @@
 <?= $this->extend('pages/employes/sidebar') ?>
 
+<?php helper('user'); ?>
+
 <?= $this->section('content') ?>
     <div class="topbar">
       <div>
@@ -7,7 +9,7 @@
         <div class="topbar-breadcrumb">Accueil</div>
       </div>
       <div class="topbar-actions">
-        <a href="page3-form-conge.html" class="btn-forest" style="padding:7px 14px;font-size:.82rem">
+        <a href="/employe/new-demande" class="btn-forest" style="padding:7px 14px;font-size:.82rem">
           <i class="bi bi-plus-lg"></i> Nouvelle demande
         </a>
       </div>
@@ -39,9 +41,29 @@
           <div class="metric-label">Jours restants</div>
           <div class="metric-sub">sur 30 cette année</div>
         </div> -->
-        <?php foreach($conges as $c): ?>
+        <?php foreach($conges as $c): 
+          $icon = "";
+          $color = "";
+          switch ($c['statut']) {
+            case 'En attente':
+              $icon = "bi-clock-fill";
+              $color = "amber";
+              break;
+            case 'Refuse':
+              $icon = "bi-exclamation-circle-fill";
+              $color = "red";
+              break;
+            case 'Approuve':
+              $icon = "bi-check-circle-fill";
+              $color = "green";
+              break;
+            default:
+              # code...
+              break;
+          }
+          ?>
           <div class="metric">
-            <div class="metric-top"><div class="metric-icon mi-green"><i class="bi bi-check-circle"></i></div></div>
+            <div class="metric-top"><div class="metric-icon mi-<?= $color ?>"><i class="bi <?= $icon ?>"></i></div></div>
             <div class="metric-val"><?= $c['totalCount'] ?></div>
             <div class="metric-label"><?= $c['statut'] ?></div>
           </div> 
@@ -125,8 +147,8 @@
               ?>
               <tr>
                 <td><span class="type-badge t-annuel"><?= $l['libelle'] ?></span></td>
-                <td class="td-muted"><?= $l['date_debut'] ?></td>
-                <td class="td-muted"><?= $l['date_fin'] ?></td>
+                <td class="td-muted"><?= format_readable_date($l['date_debut']) ?></td>
+                <td class="td-muted"><?= format_readable_date($l['date_fin']) ?></td>
                 <td class="td-mono"><?= $l['nb_jours'] ?></td>
                 <td><span class="statut <?= $className ?>"><?= $l['statut'] ?></span></td>
                 <td><span class="td-muted" style="font-size:.75rem">—</span></td>

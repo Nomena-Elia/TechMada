@@ -8,4 +8,8 @@
         return $name1." ".$name2;
     }
 
+    function format_readable_date($date) {
+        return date("M d, Y", strtotime($date));
+    }
+
 ?>

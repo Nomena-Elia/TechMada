@@ -55,7 +55,7 @@ class EmployeController extends BaseController {
 
     public function renderCalendar() {
         $conge = new CongeModel();
-        $data = $conge->where('employe_id', session()->get('user')['id'])->findAll();
+        $data = $conge->where('employe_id', session()->get('user')['id'])->where('statut !=', 'Refuse')->findAll();
         return view('pages/employes/calendar', ['activePage' => 'calendar', 'data' => $data]);
     }
 

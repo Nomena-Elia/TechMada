@@ -52,7 +52,23 @@
             <tr><th>Employé</th><th>Type</th><th>Période</th><th>Durée</th><th>Solde dispo</th><th>Statut</th><th>Actions</th></tr>
           </thead>
           <tbody>
-            <?php foreach($all as $d) { ?>
+            <?php foreach($all as $d) {
+              $className = "";
+              switch ($d['statut']) {
+                case 'En attente':
+                  $className = 's-attente';
+                  break;
+                case 'Refuse':
+                  $className = 's-refusee';
+                  break;
+                case 'Approuve':
+                  $className = 's-approuvee';
+                  break;
+                default:
+                  # code...
+                  break;
+              }
+              ?>
                 <tr>
                     <td>
                         <div class="profile-row">
@@ -63,13 +79,13 @@
                         </div>
                     </td>
                     <td><span class="type-badge t-annuel"><?= $d['libelle'] ?></span></td>
-                    <td class="td-muted" style="font-size:.8rem"><?= $d['date_debut'] ?> → <?= $d['date_fin'] ?></td>
+                    <td class="td-muted" style="font-size:.8rem"><?= format_readable_date($d['date_debut']) ?> → <?= format_readable_date($d['date_fin']) ?></td>
                     <td class="td-mono"><?= $d['nb_jours'] ?> j</td>
                     <td>
                         <span style="font-family:'DM Mono',monospace;font-size:.82rem;color:var(--success);font-weight:500"><?= $d['jours_reste'] ?> j</span>
                         <span style="font-size:.72rem;color:var(--muted)"> dispo</span>
                     </td>
-                    <td><span class="statut s-attente"><?= $d['statut'] ?></span></td>
+                    <td><span class="statut <?= $className ?>"><?= $d['statut'] ?></span></td>
                     <td>
                         <?php if($d['statut'] === 'En attente') : ?>
                           <div class="action-btns">

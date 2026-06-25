@@ -2,6 +2,8 @@
 
 <?= $this->section('content') ?>
 
+<?php helper("user") ?>
+
 <div class="main">
     <div class="topbar">
       <div>
@@ -53,8 +55,8 @@
                 ?>
                 <tr>
                     <td><span class="type-badge t-annuel"><?= $d['libelle'] ?></span></td>
-                    <td class="td-muted"><?= $d['date_debut'] ?></td>
-                    <td class="td-muted"><?= $d['date_fin'] ?></td>
+                    <td class="td-muted"><?= format_readable_date($d['date_debut']) ?></td>
+                    <td class="td-muted"><?= format_readable_date($d['date_fin']) ?></td>
                     <td class="td-mono"><?= $d['nb_jours'] ?> j</td>
                     <td><span class="statut <?= $className ?>"><?= $d['statut'] ?></span></td>
                     <td class="td-muted" style="font-size:.78rem">—</td>

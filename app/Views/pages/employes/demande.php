@@ -1,7 +1,7 @@
 <?= $this->extend('pages/employes/sidebar') ?>
 
 <?php
-
+  // Comment
     $errors = session()->get('errors') ?? [];
 
 ?>
