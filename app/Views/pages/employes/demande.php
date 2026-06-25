@@ -1,7 +1,7 @@
 <?= $this->extend('pages/employes/sidebar') ?>
 
 <?php
-
+  // Comment
     $errors = session()->get('errors') ?? [];
 
 ?>
@@ -20,6 +20,12 @@
 
     <div class="content">
 
+    <?php if(session()->get('error')) { ?>
+        <div class="flash flash-error">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <?= session()->get('error') ?>
+      </div>
+    <?php } ?>
       <div class="form-layout">
 
         <div>
@@ -46,12 +52,12 @@
             <div class="form-grid-2" style="margin-bottom:1rem">
               <div class="f-group">
                 <label class="f-label">Date de début <span style="color:var(--danger)">*</span></label>
-                <input type="date" name="date_debut" class="f-input is-invalid" value="<?php echo old('date_debut') ?? '2025-06-23' ?>"/>
+                <input type="date" id="date1" name="date_debut" class="f-input is-invalid" value="<?php echo old('date_debut') ?? '2026-06-23' ?>"/>
                 <span class="invalid-feedback"><?= $errors['date_debut'] ?? '' ?></span>
               </div>
               <div class="f-group">
                 <label class="f-label">Date de fin <span style="color:var(--danger)">*</span></label>
-                <input type="date" name="date_fin" class="f-input is-invalid" value="<?php echo old('date_fin') ?? '2025-06-27' ?>"/>
+                <input type="date" id="date2" name="date_fin" class="f-input is-invalid" value="<?php echo old('date_fin') ?? '2026-06-27' ?>"/>
                 <span class="invalid-feedback"><?= $errors['date_fin'] ?? '' ?></span>
               </div>
             </div>
@@ -127,5 +133,27 @@
       </div>
     </div>
     <div class="footer-app"><i class="bi bi-c-circle"></i> 2025 <span>TechMada RH</span></div>
+
+    <script>
+      const input1 = document.getElementById('date1');
+      const input2 = document.getElementById('date2');
+      updateDiff();
+      input1.addEventListener('input', function() {
+        updateDiff();
+      });
+      input2.addEventListener('input', function() {
+        updateDiff();
+      });
+      function updateDiff() {
+        const date1 = new Date(input1.value);
+        const date2 = new Date(input2.value);
+
+        const diff = Math.abs(date1 - date2);
+
+        const days  = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+        document.querySelector(".f-computed-num").innerText = days;
+      }
+    </script>
 
 <?= $this->endSection() ?>

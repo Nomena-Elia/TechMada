@@ -9,14 +9,15 @@ use DateTime;
 class RhController extends BaseController {
     public function home() {
         $conge = new CongeModel();
-        $data = $conge->getCongeEnAttente();
-        return view('pages/rh/list-demande', ['data' => $data]);
+        $all = $conge->getAllCongeComplet($this->request->getGet('statut'));
+        $count = $conge->getCountByStatut();
+        return view('pages/rh/list-demande', ['count' => $count, 'all' => $all, 'filter' => $this->request->getGet('statut')]);
     }
 
     public function accept($id) {
         $conge = new CongeModel();
         $solde = new SoldeModel();
-        $conge->update($id, ['statut' => 'Refuse', ['traite_par' => session()->get('user')['id']]]);
+        $conge->update($id, ['statut' => 'Approuve', 'traite_par' => session()->get('user')['id']]);
         $found = $conge->find($id);
         var_dump($found);
         $currentSolde = $solde
@@ -34,10 +35,10 @@ class RhController extends BaseController {
     public function deny($id) {
         $conge = new CongeModel();
         $solde = new SoldeModel();
-        $conge->update($id, ['statut' => 'Refuse', ['traite_par' => session()->get('user')['id']]]);
+        $conge->update($id, ['statut' => 'Refuse', 'traite_par' => session()->get('user')['id']]);
         $found = $conge->find($id);
         var_dump($found);
-        return redirect()->to('/rh/dashboard')->with('success', 'Demande Approuvee');
+        return redirect()->to('/rh/dashboard')->with('success', 'Demande Refusee');
     }
 
 

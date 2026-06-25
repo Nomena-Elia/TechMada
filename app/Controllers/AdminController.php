@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\EmployesModel;
 use App\Models\DepartmentModel; // Utilisation exacte de DepartmentModel (singulier)
-use App\Models\TypeCongeModel;
+use App\Models\TypeCongesModel;
 use App\Models\CongeModel;
 
 class AdminController extends BaseController {
@@ -35,12 +35,8 @@ class AdminController extends BaseController {
         $deptModel = new DepartmentModel();
 
         $data['roles'] = $model->getEmployeRole();
-        // Utilise la jointure dynamique écrite dans votre modèle pour charger le département de chaque employé
         $data['employes'] = $model->getEmployesWithDepartment();
-        
-        // Transmet obligatoirement la liste des départements pour remplir le select de votre vue gestion-employes
         $data['departments'] = $deptModel->findAll();
-
 
         return view('pages/admin/gestion-employes', $data);
     }
@@ -54,138 +50,160 @@ class AdminController extends BaseController {
         $data['departments'] = $deptModel->findAll(); // Requis pour l'édition (changement de département)
         
         if (!$data['employe']) {
-            return redirect()->to('/admin/employe')->with('error', 'Employé introuvable');
+            return redirect()->to('/admin/employe')->with('errors', 'Employé introuvable');
         }
-        return view('admin/employes/edit', $data);
+        return view('admin/employes/edit', ['data' => $data]);
     }
 
-    public function storeEmploye() {
+    public function addEmploye(){
         $model = new EmployesModel();
         $input = $this->request->getPost();
+        $input['passwd'] = password_hash($input['passwd'], PASSWORD_DEFAULT);
 
-        // Traitement sécurisé du mot de passe
-        if (!empty($input['passwd'])) {
-            $input['passwd'] = password_hash($input['passwd'], PASSWORD_DEFAULT);
+        if(!$this->validate($model->getValidationRules()['register'])){
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-        
-        // Initialisations obligatoires vis-à-vis de la structure SQL (actif = 1)
-        $input['actif'] = 1;
+        $model->setValidationRules($model->getValidationRules()['register'])->save($input);
 
-        // Force l'application du sous-groupe de règles "register" défini dans votre EmployesModel
-        $model->setValidationGroup('register');
-
-        if ($model->insert($input)) {
-            return redirect()->to('/admin/employe')->with('success', 'Employé créé avec succès');
-        }
-        return redirect()->back()->withInput()->with('errors', $model->errors());
+        return redirect()->back()->withInput()->with('success', 'Employe cree avec succes');
     }
 
-    public function updateEmploye($id = null) {
-        $model = new EmployesModel();
-        $input = $this->request->getPost();
-        
-        // Extrait le tableau de règles du groupe 'register' pour nettoyer dynamiquement la validation
-        $rules = $model->getValidationRules()['register'];
+    public function updateEmploye(){
+        $employeModel = new EmployesModel();
+        $employe = $this->request->getPost('id');
+        // if(!$this->validate($employeModel->getValidationRules()['register'])){
+        //     return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        // }
 
-        if (!empty($input['passwd'])) {
-            $input['passwd'] = password_hash($input['passwd'], PASSWORD_DEFAULT);
-        } else {
-            unset($input['passwd']);
-            unset($rules['passwd']); // Permet de soumettre sans être bloqué par la règle 'required' du mot de passe
+        if(!$employe){
+            return redirect()->back()->withInput()->with('errors', "id Employe Manquant");
         }
 
-        // Valide les données nettoyées manuellement avant mise à jour en base
-        if (!$this->validateData($input, $rules)) {
+        $input = $this->request->getPost();
+        $input['id'] = $employe;
+        $employeModel->update($input['id'], [
+            'prenom' => $input['prenom'],
+            'nom' => $input['nom'],
+            'email' => $input['email'],
+            'department_id' => $input['department_id'],
+            'role' => $input['role'],
+            'date_embauche' => $input['date_embauche'],
+            'actif' => $input['actif'] ?? 0
+        ]);
+
+        return redirect()->back()->withInput()->with('success', 'Employe modifie avec succes');
+    }
+
+    public function updateEmployeForm($id = null){
+        $employeModel = new EmployesModel();
+        $deptModel = new DepartmentModel();
+
+        $data['roles'] = $employeModel->getEmployeRole();
+        $data['departments'] = $deptModel->findAll();
+        $data['employe'] = $employeModel->find($id);
+
+        // session()->set('employe', $data['employe']);
+        return view('/pages/admin/edit-employe', $data);
+    }
+
+    public function deleteEmploye($id = null){
+        $model = new EmployesModel();
+
+        if(!$id){
+            return redirect()->back()->withInput()->with('errors', 'id Employe introuvable');
+        }
+        $employe = $model->find($id);
+        $model->update($employe['id'], [
+            'actif' => 0
+        ]);
+
+        return redirect()->back()->withInput()->with('success', 'Employe desactive');
+    }
+
+    public function reactivateEmploye($id = null){
+        $model = new EmployesModel();
+
+        if(!$id){
+            return redirect()->back()->withInput()->with('errors', 'id Employe introuvable');
+        }
+        $employe = $model->find($id);
+        $model->update($employe['id'], [
+            'actif' => 1
+        ]);
+
+        return redirect()->back()->withInput()->with('success', 'Employe reactivate');
+    }
+
+    public function getDemandes() {
+        $conge = new CongeModel();
+        $data = $conge->getCongeComplet(session()->get('user')['id']);
+        return view('pages/admin/list-demande', ['activePage' => 'mes-demandes', 'data' => $data]);
+    }
+
+    public function getDepartments(){
+        $deptModel = new DepartmentModel();
+        $data['departments'] = $deptModel->findAll();
+
+        return view('pages/admin/gestion-departments', $data);
+    }
+
+    public function getDepartment($id = null){
+        $model = new DepartmentModel();
+        $dept = $model->find($id);
+
+        return view('pages/admin/edit-department', ['dept' => $dept]);
+    }
+
+    public function addDepartment(){
+        $model = new DepartmentModel();
+        $input = $this->request->getPost();
+
+        if(!$this->validate($model->getValidationRules())){
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        if ($model->update($id, $input)) {
-            return redirect()->to('/admin/employe')->with('success', 'Employé mis à jour avec succès');
-        }
-        return redirect()->back()->withInput()->with('errors', $model->errors());
+        $model->save($input);
+        return redirect()->back()->withInput()->with('success', 'Department saved successfully !');
     }
 
-    public function deleteEmploye($id = null) {
-        $model = new EmployesModel();
-        
-        // Optionnel : Si vous préférez une désactivation logique à une suppression physique :
-        // $model->update($id, ['actif' => 0]);
+    public function updateDepartment(){
+        $model = new DepartmentModel();
+        $input = $this->request->getPost();
 
-        if ($model->delete($id)) {
-            return redirect()->to('/admin/employe')->with('success', 'Employé supprimé avec succès');
+        if(!$input['id']){
+            return rediret()->back()->withInput()->with('errors', 'Departement introuvable');
         }
-        return redirect()->to('/admin/employe')->with('error', 'Erreur lors de la suppression');
+
+        $model->update($input['id'], [
+            'nom' => $input['nom'],
+            'description' => $input['description']
+        ]);
+
+        return redirect()->back()->withInput()->with('success', 'Department updated successfully !');
     }
 
-    // GET /admin/deparment
-    // public function getDeparments() {
-    //     $model = new DepartmentModel();
-    //     $data['departments'] = $model->findAll();
-    //     return view('admin/departments/index', $data);
-    // }
+    public function deleteDepartment($id = null){
+        $model = new DepartmentModel();
+        $model->delete($id);
 
-    // // GET /admin/deparment/(:num)
-    // public function getDeparment($id = null) {
-    //     $model = new DepartmentModel();
-    //     $data['department'] = $model->find($id);
-        
-    //     if (!$data['department']) {
-    //         return redirect()->to('/admin/deparment')->with('error', 'Département introuvable');
-    //     }
-    //     return view('admin/departments/edit', $data);
-    // }
+        return redirect()->back()->withInput()->with('success', 'Department deleted');
+    }
 
-    // // POST /admin/deparment/update/(:num)
-    // public function updateDeparment($id = null) {
-    //     $model = new DepartmentModel();
-    //     if ($model->update($id, $this->request->getPost())) {
-    //         return redirect()->to('/admin/deparment')->with('success', 'Département mis à jour avec succès');
-    //     }
-    //     return redirect()->back()->withInput()->with('errors', $model->errors());
-    // }
+    public function getTypeConges(){
+        $model = new TypeCongesModel();
+        $data['types'] = $model->findAll();
 
-    // // POST /admin/deparment/delete/(:num)
-    // public function deleteDeparment($id = null) {
-    //     $model = new DepartmentModel();
-    //     if ($model->delete($id)) {
-    //         return redirect()->to('/admin/deparment')->with('success', 'Département supprimé avec succès');
-    //     }
-    //     return redirect()->to('/admin/deparment')->with('error', 'Erreur lors de la suppression');
-    // }
+        return view('pages/admin/typeConges', $data);
+    }
 
-    // // GET /admin/typeconge
-    // public function getTypeconges() {
-    //     $model = new TypeCongeModel();
-    //     $data['types_conge'] = $model->findAll();
-    //     return view('admin/typeconge/index', $data);
-    // }
+    public function getTypeConge($id = null){
+        $model = new TypeCongesModel();
+        $type = $model->find($id);
 
-    // // GET /admin/typeconge/(:num)
-    // public function getTypeconge($id = null) {
-    //     $model = new TypeCongeModel();
-    //     $data['type_conge'] = $model->find($id);
-        
-    //     if (!$data['type_conge']) {
-    //         return redirect()->to('/admin/typeconge')->with('error', 'Type de congé introuvable');
-    //     }
-    //     return view('admin/typeconge/edit', $data);
-    // }
+        if(!$type['id']){
+            return redirect()->back()->withInput()->with('errors', 'id introuvable');
+        }
 
-    // // POST /admin/typeconge/update/(:num)
-    // public function updateTypeconge($id = null) {
-    //     $model = new TypeCongeModel();
-    //     if ($model->update($id, $this->request->getPost())) {
-    //         return redirect()->to('/admin/typeconge')->with('success', 'Type de congé mis à jour avec succès');
-    //     }
-    //     return redirect()->back()->withInput()->with('errors', $model->errors());
-    // }
-
-    // // POST /admin/typeconge/delete/(:num)
-    // public function deleteTypeconge($id = null) {
-    //     $model = new TypeCongeModel();
-    //     if ($model->delete($id)) {
-    //         return redirect()->to('/admin/typeconge')->with('success', 'Type de congé supprimé avec succès');
-    //     }
-    //     return redirect()->to('/admin/typeconge')->with('error', 'Erreur lors de la suppression');
-    // }
+        return view('pages/admin/edit-typeConges', $type);
+    }
 }

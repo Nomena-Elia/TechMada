@@ -67,8 +67,7 @@ class CongeModel extends Model
         ],
     ];
 
-    public function getCongeComplet()
-    {
+    public function getCongeComplet($emp) {
         return $this->select('
                         conges.*,
                         employes.nom,
@@ -77,6 +76,39 @@ class CongeModel extends Model
                     ')
                     ->join('employes', 'employes.id = conges.employe_id')
                     ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->where('conges.employe_id', $emp)
+                    ->findAll();
+    }
+
+    public function getAllCongeComplet($statut = null) {
+        $builder = $this->select('
+                        conges.*,
+                        employes.nom,
+                        employes.prenom,
+                        types_conge.libelle,
+                        (soldes.jours_attribues - soldes.jours_pris) as jours_reste
+                    ')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->join('soldes', 'soldes.employe_id = conges.employe_id AND soldes.types_conge_id=conges.types_conge_id');
+                    
+        if($statut !== null) {
+            $builder->where('conges.statut', $statut);
+        }
+        return $builder->findAll();
+    }
+
+    public function getCongeLast($idEmp) {
+        return $this->select('
+                        conges.*,
+                        employes.nom,
+                        employes.prenom,
+                        types_conge.libelle
+                    ')
+                    ->join('employes', 'employes.id = conges.employe_id')
+                    ->join('types_conge', 'types_conge.id = conges.types_conge_id')
+                    ->where('conges.employe_id', $idEmp)
+                    ->limit(3, 0)
                     ->findAll();
     }
 
@@ -94,6 +126,25 @@ class CongeModel extends Model
                     ->join('soldes', 'soldes.employe_id = conges.employe_id AND soldes.types_conge_id=conges.types_conge_id')
                     ->where('conges.statut', 'En attente')
                     ->findAll();
+    }
+
+    public function getCongesByEmp($idEmp) {
+        return $this->builder()
+        ->select('statut')
+        ->selectCount('conges.id', 'totalCount')
+        ->groupBy('statut')
+        ->where('conges.employe_id', $idEmp)
+        ->get()
+        ->getResultArray();
+    }
+
+    public function getCountByStatut() {
+        return $this->builder()
+        ->select('statut')
+        ->selectCount('conges.id', 'totalCount')
+        ->groupBy('statut')
+        ->get()
+        ->getResultArray();
     }
     
     public function getAbsencesMoisEnCours() {
@@ -136,6 +187,43 @@ class CongeModel extends Model
                     ->join('types_conge', 'types_conge.id = conges.types_conge_id')
                     ->orderBy('conges.id', 'DESC')
                     ->findAll(3);
+    }
+
+    public function getCongeMois(){
+        return $this->builder()
+                ->select('COUNT(employe_id) as total, strftime(\'%Y-%m\', created_at) as month')
+                ->where('statut', 'Approuve')
+                ->groupBy("month")
+                ->orderBy("month", "DESC")
+                ->get()
+                ->getResultArray();
+    }
+
+    public function getJourConge(){
+        return $this->builder()->select('COUNT(employe_id) as total, strftime("%w", created_at) as week, case strftime("%w", created_at) 
+                            when "0" then "Dimanche"
+                            when "1" then "Lundi"
+                            when "2" then "Mardi"
+                            when "3" then "Mercredi"
+                            when "4" then "Jeudi"
+                            when "5" then "Vendredi"
+                            when "6" then "Samedi"
+                        end as jourSemaine')
+                    ->where('statut', 'Approuve')
+                    ->groupBy('week')
+                    ->orderBy('week', 'DESC')
+                    ->get()
+                    ->getResultArray();
+    }
+
+
+    public function isChevauching($date_debut, $date_fin) {
+        $data = $this->select('id')
+        ->where('date_debut <= ', $date_fin)
+        ->where('date_fin >= ', $date_debut)
+        ->where('statut !=', 'Refuse')
+        ->first();
+        return !empty($data);
     }
 
 }

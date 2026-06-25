@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/assets/css/style.css">
     
     <style>
@@ -23,23 +26,24 @@
         <aside class="sidebar">
         <div class="sidebar-brand">
           <div class="sidebar-logo-icon" style="background:var(--ink);border:1px solid rgba(255,255,255,.15)"><i class="bi bi-shield-check" style="color:var(--leaf)"></i></div>
-          <div class="sidebar-brand-name">TechMada RH
+          <div class="sidebar-brand-name">TechMada Admin
             <span>Administration</span>
           </div>
         </div>
         <div class="sidebar-section">Gestion</div>
         <ul class="sidebar-nav">
-          <li><a href="page6-dashboard-admin.html" class="active"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
+          <li><a href="/admin/dashboard" class="active"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
           <li>
-            <a href="page5-liste-rh.html">
+            <a href="/admin/demande">
               <i class="bi bi-inbox"></i> Toutes les demandes
               <span class="nav-badge alert">4</span>
             </a>
           </li>
           <li><a href="/admin/employe"><i class="bi bi-people"></i> Employés</a></li>
           <li><a href="/admin/department"><i class="bi bi-building"></i> Départements</a></li>
-          <li><a href="/admin/typeconge"><i class="bi bi-tags"></i> Types de congé</a></li>
+          <li><a href="#"><i class="bi bi-tags"></i> Types de congé</a></li>
           <li><a href="#"><i class="bi bi-sliders"></i> Soldes annuels</a></li>
+          <li><a href="/admin/tableau-bord"><i class="bi bi-sliders"></i> Tableau de bord </a></li>
         </ul>
         <div class="sidebar-user">
           <div class="s-user-row">
@@ -50,9 +54,9 @@
         </div>
       </aside>
 
-      <main class="content-area">
-          <?= $this->renderSection('content') ?>
-      </main>
+    <div class="main">
+        <?= $this->renderSection('content') ?>
+    </div>
     
     </div>
   

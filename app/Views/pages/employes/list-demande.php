@@ -2,6 +2,8 @@
 
 <?= $this->section('content') ?>
 
+<?php helper("user") ?>
+
 <div class="main">
     <div class="topbar">
       <div>
@@ -32,13 +34,31 @@
             <tr><th>Type</th><th>Début</th><th>Fin</th><th>Durée</th><th>Statut</th><th>Commentaire RH</th><th>Action</th></tr>
           </thead>
           <tbody>
-            <?php foreach($data as $d): ?>
+            <?php foreach($data as $d): 
+                $className = "";
+                switch ($d['statut']) {
+                  case 'En attente':
+                    $className = "s-attente";
+                    break;
+                  case 'Refuse':
+                    $className = "s-refusee";
+                    break;
+                  case 'Approuve':
+                    $className = "s-approuvee";
+                    break;
+                  
+                  default:
+                    # code...
+                    break;
+                }
+
+                ?>
                 <tr>
                     <td><span class="type-badge t-annuel"><?= $d['libelle'] ?></span></td>
-                    <td class="td-muted"><?= $d['date_debut'] ?></td>
-                    <td class="td-muted"><?= $d['date_fin'] ?></td>
+                    <td class="td-muted"><?= format_readable_date($d['date_debut']) ?></td>
+                    <td class="td-muted"><?= format_readable_date($d['date_fin']) ?></td>
                     <td class="td-mono"><?= $d['nb_jours'] ?> j</td>
-                    <td><span class="statut s-attente"><?= $d['statut'] ?></span></td>
+                    <td><span class="statut <?= $className ?>"><?= $d['statut'] ?></span></td>
                     <td class="td-muted" style="font-size:.78rem">—</td>
                     <td><button class="btn-sm btn-cancel"><i class="bi bi-x"></i> Annuler</button></td>
                 </tr>

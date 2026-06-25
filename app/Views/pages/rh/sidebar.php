@@ -1,3 +1,5 @@
+<?php helper('user'); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,8 +33,8 @@
         </ul>
         <div class="sidebar-user">
             <div class="s-user-row">
-                <div class="avatar av-blue">RH</div>
-                <div><div class="user-name"><?= session()->get('user')['nom'] . " " . session()->get('user')['prenom'] ?></div><div class="user-role">Responsable RH</div></div>
+                <div class="avatar av-blue"><?= format_username(session()->get('user')['nom'], session()->get('user')['prenom']  ) ?></div>
+                <div><div class="user-name"><?= concat_name(session()->get('user')['nom'], session()->get('user')['prenom']  ) ?></div><div class="user-role">Responsable RH</div></div>
                 <a href="/logout" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem"><i class="bi bi-box-arrow-right"></i></a>
             </div>
         </div>

@@ -9,8 +9,11 @@ use DateTime;
 class EmployeController extends BaseController {
     public function home() {
         $solde = new SoldeModel();
-        $data = $solde->getSoldesCompletsByEmp(session('user')['id']);
-        return view('pages/employes/dashboard-employe', ['activePage' => 'dashboard', 'data' => $data]);
+        $conge = new CongeModel();
+        $data = $solde->getSoldesCompletsByEmp(session()->get('user')['id']);
+        $conges = $conge->getCongesByEmp(session()->get('user')['id']);
+        $last = $conge->getCongeLast(session()->get('user')['id']);
+        return view('pages/employes/dashboard-employe', ['activePage' => 'dashboard', 'data' => $data, 'conges' => $conges, 'last' => $last]);
     }
 
     public function demandeForm() {
@@ -21,13 +24,14 @@ class EmployeController extends BaseController {
 
     public function getDemandes() {
         $conge = new CongeModel();
-        $data = $conge->getCongeComplet();
+        $data = $conge->getCongeComplet(session()->get('user')['id']);
         return view('pages/employes/list-demande', ['activePage' => 'mes-demandes', 'data' => $data]);
     }
 
     public function submitDemande() {
         $postData = $this->request->getPost();
         $postData['employe_id'] = session()->get('user')['id'];
+        $conge = new CongeModel();
         $date1 = new DateTime($postData['date_debut']);
         $date2 = new DateTime($postData['date_fin']);
         $interval = $date1->diff($date2);
@@ -37,14 +41,22 @@ class EmployeController extends BaseController {
             $errors['date_debut'] = "La date debut doit etre anterieure a date fin";
             $errors['date_fin'] = "La date fin doit etre superieure a date debut";
             return redirect()->back()->withInput()->with('errors', $errors);
+            }
+        if($conge->isChevauching($postData['date_debut'], $postData['date_fin'])) {
+            return redirect()->back()->withInput()->with('error', 'Chevauchement avec un autre conge');
         }
         $postData['nb_jours'] = $nbdays;
         $postData['statut'] = 'En attente';
-        $conge = new CongeModel();
         if(!$conge->save($postData)) {
             return redirect()->back()->withInput()->with('errors', $conge->errors());
         }
         return redirect()->to('/employe/dashboard')->with('success', 'Votre demande de congé a bien été soumise. Elle est en attente de validation.');
+    }
+
+    public function renderCalendar() {
+        $conge = new CongeModel();
+        $data = $conge->where('employe_id', session()->get('user')['id'])->where('statut !=', 'Refuse')->findAll();
+        return view('pages/employes/calendar', ['activePage' => 'calendar', 'data' => $data]);
     }
 
 }

@@ -6,7 +6,7 @@
     class EmployesModel extends Model{
         protected $table = "employes";
         protected $id = "id";
-        protected $allowedFields = "nom, prenom, email, passwd, role, departement_id, date_embauche, actif";
+        protected $allowedFields = ["nom", "prenom", "email", "passwd", "role", "department_id", "date_embauche", "actif"];
         
         protected $returnType = 'array';
 
@@ -79,8 +79,8 @@
 
         // Récupère les employés ayant un solde global critique de congés (ex: cumul jours_attribues - jours_pris <= 2)
         public function getSoldesCritiques() {
-            $db = \Config\Database::connect();
-            return $db->table('soldes')
+
+            return $this->db->table('soldes')
                     ->select('employe_id')
                     ->groupBy('employe_id')
                     ->having('SUM(jours_attribues) - SUM(jours_pris) <=', 2)
@@ -88,7 +88,6 @@
         }
 
         public function getEmployeRole(){
-            $db = \Config\Database::connect();
             $resultats = $this->distinct()
                                 ->select('role')
                                 ->where('role IS NOT NULL')

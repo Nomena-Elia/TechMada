@@ -17,7 +17,13 @@
 </head>
 <body>
 <div class="auth-page geo-bg">
-<div class="auth-split">
+  <?php if (session()->getFlashdata('error')) : ?>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <?= esc(session()->getFlashdata('error')) ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  <?php endif; ?>
+  <div class="auth-split">
 
   <div class="auth-left">
     <div>
@@ -29,6 +35,7 @@
     </div>
     <div class="auth-roles">
       <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.25);margin-bottom:4px">Comptes de démonstration</div>
+      <?php //phpinfo()?>
       <div class="role-pill">
         <i class="bi bi-shield-check"></i>
         <div><div class="role-pill-name">Administrateur</div><div class="role-pill-cred">admin@techmada.mg · admin123</div></div>
@@ -58,7 +65,7 @@
     <form action="/login" method="POST">
       <div class="f-group">
         <label class="f-label">Adresse email</label>
-        <input type="email" name="email" class="f-input <?= !empty($errors['email']) ? 'is-invalid' : '' ?> form-control" placeholder="vous@techmada.mg" value="<?= old('email') ?? 'employe@techmada.mg' ?>"/>
+        <input type="email" name="email" class="f-input <?= !empty($errors['email']) ? 'is-invalid' : '' ?> form-control" placeholder="vous@techmada.mg" value="<?= old('email') ?? 'm.durand@entreprise.com' ?>"/>
         <span class="invalid-feedback"><?= $errors['email'] ?? ''; ?></span>
       </div>
       <div class="f-group">
@@ -70,7 +77,7 @@
             name="passwd" 
             class="f-input <?= !empty($errors['passwd']) ? 'is-invalid' : '' ?> form-control" 
             placeholder="••••••••" 
-            value="<?= old('passwd') ?? 'emp123' ?>"
+            value="<?= old('passwd') ?? 'user123' ?>"
           />
           <button 
             type="button" 
@@ -105,6 +112,7 @@
     this.querySelector('i').classList.toggle('bi-eye-slash');
   });
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
 

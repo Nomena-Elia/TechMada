@@ -1,3 +1,5 @@
+<?php helper('user'); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,6 +13,7 @@
     
     <!-- Votre fichier CSS principal -->
     <link rel="stylesheet" href="/assets/css/style.css">
+    <?= $this->renderSection('css') ?>
     
     <style>
         /* Styles spécifiques à la sidebar si vous ne les avez pas dans style.css */
@@ -56,14 +59,19 @@
                 <i class="bi bi-person"></i> Mon profil
             </a>
         </li>
+        <li>
+            <a href="/employe/calendar" class="<?= ($activePage == 'calendar') ? 'active' : '' ?>">
+                <i class="bi bi-calendar"></i> Calendrier
+            </a>
+        </li>
     </ul>
 
     <div class="sidebar-user">
         <div class="s-user-row">
             <!-- On peut dynamiser ces données plus tard avec la session -->
-            <div class="avatar av-green">EMP</div>
+            <div class="avatar av-green"><?= format_username(session()->get('user')['nom'], session()->get('user')['prenom']) ?></div>
             <div>
-                <div class="user-name"><?= session()->get('user')['nom'] . " " . session()->get('user')['prenom'] ?></div>
+                <div class="user-name"><?= concat_name(session()->get('user')['nom'], session()->get('user')['prenom']  ) ?></div>
                 <div class="user-role">Employé · IT</div>
             </div>
             <a href="/logout" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion">
@@ -76,5 +84,6 @@
     <?= $this->renderSection('content') ?>
 </div>
     </div>
+    
 </body>
 </html>
